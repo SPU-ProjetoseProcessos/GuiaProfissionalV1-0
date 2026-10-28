@@ -1,0 +1,1367 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Guia do Profissional CentralGov: como atender uma tarefa na CentralGov, do login ao desfecho, com as telas reais do sistema.">
+<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Guia do Profissional CentralGov</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: trilho das 5 fases no topo · índice à esquerda · cartão do passo (o que fazer + tela recriada com o botão marcado) */
+:root{
+  --ground:#EEF2F7; --surface:#FFFFFF; --sunken:#F5F7FA;
+  --ink:#0F1E33; --ink-2:#3B4B60; --muted:#66778C;
+  --rule:#D9E1EA; --rule-2:#B9C5D3;
+  --gov:#1351B4; --gov-deep:#0C326F; --gov-soft:#E5EEFB;
+  --mark:#FFCD07; --mark-ink:#5A4500; --mark-soft:#FFF6CC;
+  --ok:#168821; --ok-soft:#E3F4E5;
+  --warn:#B25E00; --warn-soft:#FCEFDD;
+  --stop:#C2261B; --stop-soft:#FCE9E7;
+  --f-display:"Lexend",system-ui,sans-serif;
+  --f-body:"Source Sans 3",system-ui,-apple-system,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,monospace;
+  --t-xs:.78rem; --t-sm:.9rem; --t-md:1.05rem; --t-lg:1.3rem; --t-xl:clamp(1.55rem,1.25rem+1.2vw,2.15rem);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0B1320; --surface:#121D2D; --sunken:#17243A;
+    --ink:#E8EEF6; --ink-2:#BCC8D8; --muted:#8C9CB1;
+    --rule:#22324A; --rule-2:#344862;
+    --gov:#7FAAF2; --gov-deep:#B9D0F8; --gov-soft:#16294A;
+    --mark:#FFD84A; --mark-ink:#FFE58A; --mark-soft:#2E2710;
+    --ok:#6CCB75; --ok-soft:#132A18;
+    --warn:#F0AE5C; --warn-soft:#2D2111;
+    --stop:#F2928A; --stop-soft:#2F1918;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0B1320; --surface:#121D2D; --sunken:#17243A;
+  --ink:#E8EEF6; --ink-2:#BCC8D8; --muted:#8C9CB1;
+  --rule:#22324A; --rule-2:#344862;
+  --gov:#7FAAF2; --gov-deep:#B9D0F8; --gov-soft:#16294A;
+  --mark:#FFD84A; --mark-ink:#FFE58A; --mark-soft:#2E2710;
+  --ok:#6CCB75; --ok-soft:#132A18;
+  --warn:#F0AE5C; --warn-soft:#2D2111;
+  --stop:#F2928A; --stop-soft:#2F1918;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-body);font-size:1.02rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;font-weight:600}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+
+/* ---------- topo ---------- */
+.topo{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--surface);border-bottom:1px solid var(--rule)}
+.topo-in{max-width:1200px;margin-inline:auto;padding:12px 16px 0;display:flex;flex-direction:column;gap:10px}
+.marca{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.selo{width:36px;height:36px;border-radius:10px;background:var(--gov);display:grid;place-items:center;flex:none}
+.selo svg{width:20px;height:20px}
+.marca-t{display:flex;flex-direction:column;min-width:0;flex:1}
+.marca-t b{font-family:var(--f-display);font-weight:600;font-size:var(--t-md);line-height:1.2}
+.marca-t span{font-size:var(--t-xs);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.trilho{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:0}
+.trilho::-webkit-scrollbar{display:none}
+.fase{flex:1;min-width:118px;border:0;background:none;cursor:pointer;text-align:left;padding:6px 4px 10px;display:flex;flex-direction:column;gap:6px}
+.fase i{display:block;height:5px;border-radius:3px;background:var(--rule)}
+.fase span{font-size:var(--t-xs);color:var(--muted);font-weight:600;white-space:nowrap}
+.fase span em{font-style:normal;font-family:var(--f-mono);margin-right:5px}
+.fase.feita span{color:var(--ink-2)}
+
+.fase.atual span{color:var(--gov);}
+
+/* ---------- corpo ---------- */
+.wrap{max-width:1200px;margin-inline:auto;padding-inline:16px;padding-block:22px 40px;display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:900px){.wrap{grid-template-columns:minmax(0,1fr)}.indice{order:2}}
+
+.indice{position:static;display:flex;flex-direction:column;gap:10px;overflow:visible}
+@media (min-width:901px) and (min-height:900px){.indice{position:sticky;top:128px}}
+
+.grupo{display:flex;flex-direction:column;gap:2px}
+.grupo>strong{font-size:var(--t-xs);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 8px 4px;font-weight:700}
+.indice button{display:flex;gap:10px;align-items:baseline;text-align:left;background:none;border:0;border-radius:8px;padding:4px 8px;cursor:pointer;font-size:var(--t-sm);color:var(--ink-2);line-height:1.3}
+.indice button:hover{background:var(--surface)}
+.indice button em{font-style:normal;font-family:var(--f-mono);font-size:.74rem;color:var(--muted);min-width:1.4em}
+.indice button[aria-current="true"]{background:var(--gov);color:#fff;font-weight:600}
+.indice button[aria-current="true"] em{color:#fff;opacity:.8}
+
+/* ---------- cartão do passo ---------- */
+.passo{display:flex;flex-direction:column;gap:20px;min-width:0}
+.cab{display:flex;flex-direction:column;gap:6px}
+.eyebrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:var(--t-xs);font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--gov)}
+.eyebrow .n{font-family:var(--f-mono);background:var(--gov-soft);color:var(--gov);border-radius:6px;padding:2px 7px;letter-spacing:0}
+.cab h2{font-size:var(--t-xl);line-height:1.15;letter-spacing:-.01em}
+.cab p{margin:0;color:var(--ink-2);max-width:64ch;font-size:var(--t-md)}
+.cab p b{color:var(--ink)}
+
+.corpo{display:grid;grid-template-columns:minmax(0,290px) minmax(0,1fr);gap:20px;align-items:start}
+.corpo.so{grid-template-columns:minmax(0,1fr)}
+@media (max-width:1060px){.corpo{grid-template-columns:minmax(0,1fr)}}
+
+.faca{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px 16px 18px;display:flex;flex-direction:column;gap:12px}
+.faca h3{font-size:var(--t-xs);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;font-family:var(--f-body)}
+.faca ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;counter-reset:f}
+.faca li{counter-increment:f;display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start}
+.faca li::before{content:counter(f);width:28px;height:28px;border-radius:50%;background:var(--gov);color:#fff;font-family:var(--f-display);font-weight:600;font-size:.85rem;display:grid;place-items:center}
+.faca li b{color:var(--ink)}
+.faca li span{color:var(--ink-2)}
+
+/* ---------- telas recriadas ---------- */
+.tela{border:1px solid var(--rule-2);border-radius:12px;background:var(--surface);overflow:hidden;box-shadow:0 1px 0 var(--rule),0 10px 28px -18px rgba(12,50,111,.35)}
+.tela-et{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--rule);background:var(--sunken);font-size:var(--t-xs);color:var(--muted)}
+.tela-et .pts{display:flex;gap:4px}
+.tela-et .pts i{width:8px;height:8px;border-radius:50%;background:var(--rule-2)}
+.tela-et .url{font-family:var(--f-mono);font-size:.72rem;background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:2px 10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
+.tela-sc{overflow-x:auto}
+.tela-in{padding:18px;min-width:470px}
+.tela.livre .tela-in{min-width:0}
+.legenda{font-size:var(--t-xs);color:var(--muted);display:flex;gap:6px;align-items:center;margin-top:-10px}
+.legenda i{width:14px;height:14px;border-radius:4px;border:2.5px solid var(--mark);display:inline-block}
+
+/* marcador "clique aqui" */
+.alvo{position:relative;outline:3px solid var(--mark);outline-offset:3px;border-radius:8px}
+.alvo.r{border-radius:999px}
+.alvo::after{content:attr(data-tag);position:absolute;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%);background:var(--mark);color:#3A2C00;font:700 .68rem/1 var(--f-body);letter-spacing:.04em;text-transform:uppercase;padding:5px 8px;border-radius:6px;white-space:nowrap;pointer-events:none;z-index:2}
+.alvo.abaixo::after{bottom:auto;top:calc(100% + 9px)}
+@media (prefers-reduced-motion:no-preference){.alvo{animation:pulso 2.2s ease-in-out infinite}}
+@keyframes pulso{0%,100%{outline-color:var(--mark)}50%{outline-color:transparent}}
+
+.ui-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--rule);font-size:.86rem;color:var(--gov)}
+.ui-bar .ics{display:flex;gap:8px}
+.una{font-family:var(--f-display);font-weight:700;color:var(--gov);letter-spacing:.12em;font-size:.95rem}
+.ui-h{font-family:var(--f-display);font-weight:500;font-size:1.05rem;margin:14px 0 10px;display:flex;gap:6px 10px;align-items:baseline;flex-wrap:wrap}
+.ui-h code{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);font-weight:400}
+.abas{display:flex;gap:2px;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.abas span{padding:8px 12px;font-size:.86rem;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.abas span.on{color:var(--gov);border-bottom-color:var(--gov);font-weight:600}
+.acoes{display:flex;gap:10px;padding:16px 0 4px;flex-wrap:wrap}
+.ico{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--rule-2);color:var(--gov);display:grid;place-items:center;flex:none;background:var(--surface)}
+.ico svg{width:16px;height:16px}
+.ico.g{color:var(--ok)} .ico.r{color:var(--stop)} .ico.a{color:var(--warn)}
+.ico.cheio{background:var(--gov);border-color:var(--gov);color:#fff}
+
+.campo{border:1px solid var(--rule-2);background:var(--sunken);border-radius:8px;padding:9px 11px;font-size:.88rem;color:var(--muted);display:flex;justify-content:space-between;gap:8px;align-items:center}
+.campo.alto{min-height:66px;align-items:flex-start}
+.campo.erro{border-color:var(--stop)}
+.rotulo{font-size:.8rem;color:var(--ink-2);margin:12px 0 4px;font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:6px;background:var(--gov);color:#fff;padding:7px 18px;font-size:.87rem;font-weight:600;border-radius:999px;white-space:nowrap}
+.btn.v{background:transparent;color:var(--gov);border:1.5px solid var(--gov)}
+.linha{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.obg{font-size:.76rem;color:var(--stop);margin-top:4px}
+.regras{border:1px solid var(--rule);border-radius:8px;padding:9px 11px;font-size:.8rem;color:var(--ink-2);display:flex;flex-direction:column;gap:2px;margin-top:10px}
+.ficticio{font-family:var(--f-mono);font-size:.7rem;color:var(--muted);border:1px dashed var(--rule-2);border-radius:4px;padding:0 5px;margin-left:4px}
+
+.menu{border:1px solid var(--rule);border-radius:8px;width:230px;overflow:hidden}
+.menu div{padding:9px 12px;font-size:.88rem;border-bottom:1px solid var(--rule);color:var(--ink-2);display:flex;justify-content:space-between}
+.menu div:last-child{border-bottom:0}
+.menu div.on{color:var(--gov);font-weight:600}
+.menu div.sub{padding-left:26px;background:var(--gov-soft);color:var(--gov-deep);font-weight:600}
+
+.grade{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 18px;margin:0;padding-top:4px}
+.grade div{display:flex;flex-direction:column;gap:1px}
+.grade dt{font-size:.76rem;color:var(--gov);font-weight:600}
+.grade dd{margin:0;font-size:.88rem}
+.grade div.chave{background:var(--mark-soft);border-radius:6px;padding:4px 6px;margin:-4px -6px}
+
+.contadores{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.cont{border-radius:8px;padding:9px 10px;background:var(--gov-soft);display:flex;gap:8px;align-items:baseline}
+.cont b{font-family:var(--f-display);font-size:1.35rem;font-weight:600;color:var(--gov);font-variant-numeric:tabular-nums}
+.cont span{font-size:.78rem;color:var(--ink-2);line-height:1.2}
+.cont.forte{background:var(--gov)} .cont.forte b,.cont.forte span{color:#fff}
+.cont.alerta b{color:var(--stop)}
+
+.check{display:flex;flex-direction:column;gap:12px}
+.check>div{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:start}
+.check .m{width:30px;height:30px;border-radius:8px;border:2px solid var(--gov);color:var(--gov);display:grid;place-items:center}
+.check .m svg{width:16px;height:16px}
+.check b{font-family:var(--f-display);font-weight:500}
+.check p{margin:2px 0 0;font-size:.9rem;color:var(--ink-2)}
+
+/* ---------- avisos ---------- */
+.avisos{display:flex;flex-direction:column;gap:10px}
+.nota{border-radius:12px;padding:13px 16px 14px;display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px;align-items:start;background:var(--gov-soft)}
+.nota .i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--gov);color:#fff}
+.nota .i svg{width:14px;height:14px}
+.nota strong{display:block;font-family:var(--f-display);font-weight:600;font-size:.95rem;color:var(--gov-deep)}
+.nota p{margin:2px 0 0;color:var(--ink-2)}
+.nota.cuide{background:var(--warn-soft)} .nota.cuide .i{background:var(--warn)} .nota.cuide strong{color:var(--warn)}
+.nota.trava{background:var(--stop-soft)} .nota.trava .i{background:var(--stop)} .nota.trava strong{color:var(--stop)}
+
+/* ---------- decisão ---------- */
+.ramos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:620px){.ramos{grid-template-columns:minmax(0,1fr)}}
+.ramo{text-align:left;border:1px solid var(--rule);border-radius:14px;background:var(--surface);padding:16px;cursor:pointer;display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 14px;align-items:start;transition:border-color .15s,transform .15s}
+.ramo:hover{border-color:var(--gov);transform:translateY(-1px)}
+.ramo .ico{width:44px;height:44px;grid-row:span 3}
+.ramo .ico svg{width:20px;height:20px}
+.ramo .q{font-size:.86rem;color:var(--muted)}
+.ramo b{font-family:var(--f-display);font-weight:600;font-size:1.15rem}
+.ramo .d{font-size:.9rem;color:var(--ink-2)}
+.ramo.ok b{color:var(--ok)} .ramo.warn b{color:var(--warn)} .ramo.stop b{color:var(--stop)} .ramo.blue b{color:var(--gov)}
+.ramo.ok .ico{border-color:var(--ok)} .ramo.warn .ico{border-color:var(--warn)} .ramo.stop .ico{border-color:var(--stop)} .ramo.blue .ico{border-color:var(--gov)}
+
+/* ---------- visão geral ---------- */
+.mapa{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;counter-reset:m}
+@media (max-width:760px){.mapa{grid-template-columns:minmax(0,1fr)}}
+.etapa{border:1px solid var(--rule);border-radius:14px;background:var(--surface);padding:14px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px;position:relative}
+.etapa:hover{border-color:var(--gov)}
+.etapa .num{font-family:var(--f-display);font-weight:700;font-size:1.6rem;color:var(--gov);line-height:1}
+.etapa b{font-family:var(--f-display);font-weight:600}
+.etapa span{font-size:.86rem;color:var(--ink-2)}
+.etapa.fim{background:var(--gov);border-color:var(--gov)}
+.etapa.fim .num,.etapa.fim b,.etapa.fim span{color:#fff}
+
+.cola{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:700px){.cola{grid-template-columns:minmax(0,1fr)}}
+.cola section{background:var(--surface);border:1px solid var(--rule);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px}
+.cola h3{font-size:1rem}
+.cola ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;color:var(--ink-2);font-size:.95rem}
+.cola ul b{color:var(--ink)}
+.tab{width:100%;border-collapse:collapse;font-size:.92rem}
+.tab td{padding:7px 4px;border-bottom:1px solid var(--rule);vertical-align:top}
+.tab tr:last-child td{border-bottom:0}
+.tab td:first-child{font-weight:600;white-space:nowrap;padding-right:12px}
+.tab .ok{color:var(--ok)} .tab .warn{color:var(--warn)} .tab .stop{color:var(--stop)} .tab .blue{color:var(--gov)}
+
+/* ---------- navegação ---------- */
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:30;background:var(--surface);border-top:1px solid var(--rule);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))}
+.nav-in{max-width:1200px;margin-inline:auto;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.nav button{background:var(--gov);color:#fff;border:0;padding:10px 22px;font-weight:600;border-radius:999px;cursor:pointer;font-size:.95rem}
+.nav button.sec{background:transparent;color:var(--gov);border:1.5px solid var(--gov)}
+.nav button[disabled]{opacity:.35;cursor:default}
+.nav .cont-p{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);text-align:center}
+.nav .dica{display:block;font-family:var(--f-body);font-size:.72rem}
+@media (max-width:560px){.nav .dica{display:none}.nav button{padding:10px 16px}}
+
+
+/* ---------- telas reais ---------- */
+.fotos{display:flex;flex-direction:column;gap:18px;min-width:0}
+.foto{margin:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.foto .zoom{display:block;width:100%;padding:0;border:1px solid var(--rule-2);border-radius:12px;background:#fff;overflow:hidden;cursor:zoom-in;box-shadow:0 1px 0 var(--rule),0 12px 30px -20px rgba(12,50,111,.45);transition:border-color .15s}
+.foto .zoom:hover{border-color:var(--gov)}
+.foto img{display:block;width:100%;height:auto}
+.foto.estreita .zoom{max-width:330px}
+.foto figcaption{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.86rem;color:var(--ink-2)}
+.foto figcaption b{font-family:var(--f-mono);font-weight:500;color:var(--gov);margin-right:6px}
+.foto .amp{color:var(--muted);font-size:.8rem}
+.origem{font-size:.8rem;color:var(--muted);display:flex;gap:8px;align-items:center}
+.origem i{width:16px;height:12px;border:2.5px solid #E1251B;display:inline-block;border-radius:2px}
+.lupa{position:fixed;inset:0;z-index:50;background:rgba(8,16,30,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px));cursor:zoom-out}
+.lupa[hidden]{display:none}
+.lupa img{max-width:100%;max-height:calc(100% - 50px);object-fit:contain;border-radius:8px;background:#fff}
+.lupa button{background:#fff;color:#0F1E33;border:0;border-radius:999px;padding:8px 18px;font-weight:600;cursor:pointer}
+
+/* ---------- separação: índice e conteúdo como painéis ---------- */
+.indice{background:var(--surface);border:1px solid var(--rule);border-radius:16px;padding:14px 10px;box-shadow:0 8px 24px -20px rgba(12,50,111,.5)}
+.indice .grupo+.grupo{border-top:1px solid var(--rule);padding-top:8px}
+.indice button:hover{background:var(--gov-soft)}
+.passo{background:var(--surface);border:1px solid var(--rule);border-radius:18px;padding:0 0 26px;overflow:hidden;box-shadow:0 14px 34px -24px rgba(12,50,111,.55)}
+.passo>*{margin-inline:26px}
+.passo>.cab{margin:0;padding:22px 26px 20px;background:var(--gov-soft);border-bottom:1px solid var(--rule)}
+@media (max-width:600px){.passo>*{margin-inline:16px}.passo>.cab{padding:18px 16px}}
+.faca{background:var(--sunken);border-color:var(--rule)}
+.etapa,.ramo,.cola section{background:var(--sunken)}
+.etapa:hover,.ramo:hover{background:var(--surface)}
+.etapa.fim,.etapa.fim:hover{background:var(--gov)}
+.nota{border:1px solid var(--rule)}
+
+.inicio{display:inline-flex;align-items:center;gap:8px;background:var(--gov-soft);color:var(--gov);border:1.5px solid var(--gov);border-radius:999px;padding:7px 16px;font-weight:600;font-size:.9rem;cursor:pointer;flex:none}
+.inicio svg{width:17px;height:17px}
+.inicio:hover{background:var(--gov);color:#fff}
+.inicio[aria-current="true"]{background:var(--gov);color:#fff}
+@media (max-width:520px){.inicio{padding:7px 12px}.inicio .t{display:none}}
+.selo{cursor:pointer}
+
+.cta-linha{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:10px}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--gov);color:#fff;border:0;border-radius:999px;padding:13px 28px;font-family:var(--f-display);font-weight:600;font-size:1.08rem;cursor:pointer;box-shadow:0 10px 22px -12px rgba(19,81,180,.8);transition:transform .15s,background .15s}
+.cta:hover{filter:brightness(.92);transform:translateY(-1px)}
+.cta span{font-size:1.2rem}
+.cta-info{font-size:.88rem;color:var(--muted)}
+.seguir{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:12px;border-top:1px solid var(--rule);padding-top:20px;margin-top:4px}
+@media (max-width:560px){.seguir{grid-template-columns:minmax(0,1fr)}.seguir .ant{order:2}}
+.seg{display:flex;flex-direction:column;gap:3px;text-align:left;border-radius:14px;padding:13px 18px;cursor:pointer;border:1.5px solid var(--rule-2);background:var(--surface);transition:border-color .15s,transform .15s,background .15s}
+.seg small{font-size:.78rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.seg span{font-family:var(--f-display);font-weight:600;font-size:1rem;color:var(--ink)}
+.seg:hover{border-color:var(--gov)}
+.seg.prox{background:var(--gov);border-color:var(--gov);text-align:right;align-items:flex-end}
+.seg.prox small{color:#fff;opacity:.85}
+.seg.prox span{color:#fff}
+.seg.prox:hover{filter:brightness(.92);transform:translateY(-1px)}
+footer p{margin:0}
+footer{display:flex;flex-direction:column;gap:6px}
+.autoria{color:var(--ink-2);font-size:.9rem;border-top:1px solid var(--rule);padding-top:14px}
+.autoria b{color:var(--gov);font-family:var(--f-mono);font-weight:500;letter-spacing:.02em}
+
+/* ---------- trilho maior e colorido ---------- */
+.trilho{gap:10px;padding:4px 0 12px}
+.fase{min-width:150px;padding:6px 2px 4px;gap:8px;flex-direction:column-reverse}
+.fase i{height:12px;border-radius:999px;background:var(--rule);position:relative;overflow:hidden;transition:background .3s}
+.fase i::after{content:"";position:absolute;inset:0;width:var(--p,0%);background:var(--c);border-radius:999px;transition:width .35s ease}
+.fase span{font-size:.98rem;display:flex;align-items:center;gap:8px;color:var(--muted)}
+.fase span em{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:.85rem;background:var(--rule);color:var(--ink-2);margin:0;flex:none;transition:background .3s,color .3s}
+.fase:nth-child(1){--c:#1351B4} .fase:nth-child(2){--c:#0B7FA8} .fase:nth-child(3){--c:#6A3FC1} .fase:nth-child(4){--c:#C27A00} .fase:nth-child(5){--c:#168821}
+.fase.feita{--p:100%}
+.fase.feita i{background:var(--c)}
+.fase.feita span{color:var(--ink)}
+.fase.feita span em{background:var(--c);color:#fff;font-size:0}
+.fase.feita span em::before{content:"✓";font-size:.9rem}
+.fase.atual i{background:color-mix(in srgb,var(--c) 22%,var(--rule))}
+.fase.atual span{color:var(--c);font-weight:700}
+.fase.atual span em{background:var(--c);color:#fff;box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 25%,transparent)}
+.fase:hover span{color:var(--c)}
+
+.link-portal{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:10px;background:var(--gov);color:#fff;text-decoration:none;font-weight:600;border-radius:999px;padding:10px 16px;font-size:.95rem;box-shadow:0 8px 18px -12px rgba(19,81,180,.9)}
+.link-portal:hover{filter:brightness(.92)}
+.url-link{text-decoration:none;border-color:var(--gov)!important;background:var(--gov-soft)!important;color:var(--ink)!important;cursor:pointer}
+.url-link .u{font-family:var(--f-mono);font-size:.84rem;white-space:nowrap;color:var(--gov);text-decoration:underline;text-underline-offset:3px}
+.url-link:hover{border-width:2px}
+.url-inline{font-family:var(--f-mono);font-size:.84rem;white-space:nowrap;color:var(--gov);font-weight:500;text-underline-offset:3px}
+@media (max-width:420px){.url-inline{white-space:normal;overflow-wrap:anywhere}}
+.teclas{margin-left:auto;font-size:.8rem;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink-2);display:flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:4px 12px}
+.teclas kbd{font-family:var(--f-mono);font-size:.8rem;border:1px solid var(--rule-2);border-bottom-width:2px;border-radius:5px;padding:1px 7px;background:var(--sunken);color:var(--ink)}
+@media (max-width:560px){.teclas{display:none}}
+
+/* ---------- seta do passo atual + cor da fase ---------- */
+.grupo{--c:#1351B4}
+.indice .grupo>strong{display:flex;align-items:center;gap:7px;color:var(--c)}
+.indice .grupo>strong i{width:9px;height:9px;border-radius:50%;background:var(--c);flex:none}
+.indice button{position:relative}
+.indice button[aria-current="true"]{background:var(--c);color:#fff;border-radius:8px 0 0 8px;box-shadow:0 6px 14px -8px var(--c)}
+.indice button[aria-current="true"]::after{content:"";position:absolute;top:0;bottom:0;left:100%;width:30px;background:var(--c);clip-path:polygon(0 0,100% 50%,0 100%)}
+@media (max-width:900px){.indice button[aria-current="true"]{border-radius:8px}.indice button[aria-current="true"]::after{display:none}}
+.passo:focus{outline:none}
+.passo{--c:#1351B4;border-left:6px solid var(--c)}
+.passo>.cab{background:color-mix(in srgb,var(--c) 11%,var(--surface))}
+.passo .eyebrow{color:var(--c)}
+.passo .eyebrow .n{background:var(--c);color:#fff}
+.passo .faca li::before{background:var(--c)}
+
+.resumo-bt{background:var(--mark-soft);border-color:var(--warn);color:var(--warn)}
+.resumo-bt:hover,.resumo-bt[aria-current="true"]{background:var(--warn);color:#fff}
+.marca .inicio+.inicio{margin-left:-4px}
+.indice .ir-resumo{margin-top:4px;background:var(--mark-soft);color:var(--warn);font-weight:600;border:1px dashed var(--warn)}
+.indice .ir-resumo em{color:var(--warn)}
+.cta2{background:transparent;border:1.5px solid var(--gov);color:var(--gov);border-radius:999px;padding:12px 22px;font-family:var(--f-display);font-weight:600;font-size:1rem;cursor:pointer}
+.cta2:hover{background:var(--gov-soft)}
+
+.passo>.cab.abre{padding-block:30px 26px}
+.passo>.cab.abre h2{font-size:clamp(1.8rem,1.4rem+1.6vw,2.6rem)}
+.intro{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.intro{grid-template-columns:minmax(0,1fr)}}
+.intro section{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;background:var(--sunken);border:1px solid var(--rule);border-radius:14px;padding:18px}
+.intro-ic{width:44px;height:44px;border-radius:12px;background:var(--gov);color:#fff;display:grid;place-items:center}
+.intro-ic svg{width:22px;height:22px}
+.intro h3{font-size:1.15rem;margin-bottom:6px}
+.intro p{margin:0 0 8px;color:var(--ink-2);text-align:justify;hyphens:auto}
+.intro p:last-child{margin-bottom:0}
+.kbd-linha{justify-self:start;width:max-content;max-width:calc(100% - 52px);display:flex;flex-wrap:nowrap;white-space:nowrap;align-items:center;gap:6px;text-align:left!important;background:var(--surface);border:1px solid var(--rule);border-radius:999px;padding:5px 14px;font-size:.9rem;color:var(--ink)!important;margin-top:4px!important}
+.kbd-linha kbd,.teclas kbd{font-family:var(--f-mono);font-size:.8rem;border:1px solid var(--rule-2);border-bottom-width:2px;border-radius:5px;padding:1px 7px;background:var(--sunken);color:var(--ink)}
+.intro-seq{margin-block:0;color:var(--ink-2);font-size:1.02rem;text-align:justify}
+.passo>.cab.abre p{max-width:none;text-align:justify}
+@media (max-width:420px){.kbd-linha{white-space:normal;flex-wrap:wrap}}
+.como{display:flex;flex-direction:column;gap:14px;background:var(--sunken);border:1px solid var(--rule);border-radius:14px;padding:16px 18px}
+.como>div:first-child{display:flex;flex-direction:column;gap:2px}
+.como b{font-family:var(--f-display);font-weight:600}
+.como>div:first-child span{color:var(--ink-2)}
+
+/* ---------- cabeçalho no padrão dos guias CentralGov (cor própria: roxo) ---------- */
+:root{--hdr-a:#3D1A6E;--hdr-b:#6B3FB8}
+.topo-in{max-width:none;padding:0;gap:0}
+.faixa{background:linear-gradient(100deg,var(--hdr-a) 0%,var(--hdr-b) 100%);color:#fff}
+.faixa .marca{max-width:1200px;margin-inline:auto;padding:12px 16px;gap:14px}
+.logo-una{background:#fff;border-radius:12px;padding:6px 10px;height:58px;display:grid;place-items:center;flex:none;box-shadow:0 4px 14px -6px rgba(0,0,0,.4)}
+.logo-una img{height:44px;width:auto;display:block}
+.faixa .selo{width:46px;height:46px;border-radius:12px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;cursor:pointer}
+.faixa .selo svg{width:22px;height:22px}
+.faixa .marca-t{gap:2px}
+.faixa .marca-t .tag{align-self:flex-start;font-style:normal;background:#fff;color:var(--hdr-a);font-weight:700;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:3px 10px;margin-bottom:2px}
+.faixa .marca-t b{color:#fff;font-size:1.08rem}
+.faixa .marca-t span{color:rgba(255,255,255,.78)}
+.faixa .inicio{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.75);color:#fff}
+.faixa .inicio:hover,.faixa .inicio[aria-current="true"]{background:#fff;color:var(--hdr-a)}
+.topo .trilho{max-width:1200px;margin-inline:auto;width:100%;padding:12px 16px 12px}
+@media (max-width:640px){.logo-una{display:none}.faixa .selo{display:none}}
+
+/* simplificação no padrão do Manual do Usuário */
+.faixa .logo-una{width:auto;height:auto;padding:5px 10px;background:#fff;border:0;border-radius:12px}
+.faixa .logo-una img{height:46px}
+.faixa .marca-t b{font-size:1.12rem}
+.faixa .marca-t span{color:rgba(255,255,255,.82)}
+.faixa .inicio{background:#fff;color:var(--hdr-a);border-color:#fff}
+.faixa .inicio:hover,.faixa .inicio[aria-current="true"]{background:rgba(255,255,255,.18);color:#fff;border-color:#fff}
+@media (max-width:640px){.faixa .logo-una{display:grid}}
+@media (max-width:520px){.faixa .logo-una{padding:3px 6px}.faixa .logo-una img{height:34px}.faixa .marca-t b{font-size:.95rem}}
+.topo .trilho{display:none!important}
+
+/* ---------- passo cabe na tela, sem rolar ---------- */
+.col-esq{display:flex;flex-direction:column;gap:12px;min-width:0}
+.col-esq .nota{padding:11px 13px}
+.col-esq .nota p{font-size:.92rem}
+.passo{gap:16px;padding-bottom:20px}
+.passo>.cab{padding-block:16px 14px}
+.cab h2{font-size:clamp(1.3rem,1.1rem + .8vw,1.7rem)}
+.fotos{gap:12px}
+.fotos.n2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+.fotos .origem{grid-column:1/-1}
+.foto{gap:6px}
+.foto .zoom{width:auto;max-width:100%;align-self:flex-start}
+.foto img{width:auto;max-width:100%;max-height:calc(100vh - 330px);object-fit:contain}
+.fotos.n2 .foto img{max-height:calc(100vh - 360px)}
+.seguir{padding-top:14px}
+.seg{padding:10px 16px}
+@media (max-width:900px){.fotos.n2{grid-template-columns:minmax(0,1fr)}.foto img{max-height:none}}
+
+/* ---------- índice como passo a passo sequencial ---------- */
+.indice .grupo[style]{gap:0}
+.indice .grupo[style]>strong{padding-bottom:6px}
+.indice .grupo[style] button{align-items:center;gap:11px;padding:6px 8px;min-height:38px}
+.indice .grupo[style] button em{width:26px;height:26px;min-width:26px;border-radius:50%;border:2px solid var(--c);background:var(--surface);color:var(--c);display:grid;place-items:center;font-family:var(--f-display);font-weight:600;font-size:.74rem;position:relative;z-index:1;transition:background .2s}
+.indice .grupo[style] button:not(:last-child)::before{content:"";position:absolute;left:20px;top:50%;height:100%;width:2px;background:color-mix(in srgb,var(--c) 30%,var(--rule));z-index:0}
+.indice .grupo[style] button.feito em{background:var(--c);color:#fff;font-size:0}
+.indice .grupo[style] button.feito em::before{content:"✓";font-size:.8rem}
+.indice .grupo[style] button.feito:not(:last-child)::before{background:var(--c)}
+.indice .grupo[style] button.feito span{color:var(--muted)}
+.indice .grupo[style] button[aria-current="true"] em{background:#fff;color:var(--c);border-color:#fff;opacity:1;font-size:.74rem}
+.indice .grupo[style] button[aria-current="true"] em::before{content:none}
+.indice .grupo[style] button:hover em{background:color-mix(in srgb,var(--c) 15%,var(--surface))}
+.indice .grupo[style] button.feito:hover em{background:var(--c)}
+
+/* ---------- índice compacto: cabe na altura da tela ---------- */
+@media (min-width:901px){
+.wrap{grid-template-columns:270px minmax(0,1fr)}
+.indice{position:sticky;top:96px;gap:3px;padding:8px 8px;overflow:visible}
+.indice .grupo+.grupo{padding-top:3px}
+@media (max-height:820px){.indice .grupo[style] button{font-size:.8rem;min-height:18px!important;padding-block:0!important}.indice .grupo[style] button em{width:17px!important;height:17px!important;min-width:17px!important;font-size:.58rem!important}.indice .grupo:first-child button{padding-block:1px!important}.indice .grupo[style] button:not(:last-child)::before{left:16px!important}.indice .grupo>strong{padding:1px 8px 1px!important}}
+.indice .grupo>strong{font-size:.68rem;padding:2px 8px 3px!important}
+.indice .grupo:first-child button{padding:3px 8px;font-size:.84rem}
+.indice .ir-resumo{margin-top:2px}
+.indice .grupo[style] button{min-height:clamp(19px,calc((100vh - 420px) / 18),36px);padding:1px 8px;gap:9px;font-size:.84rem;line-height:1.2}
+.indice .grupo[style] button span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.indice .grupo[style] button em{width:20px;height:20px;min-width:20px;font-size:.64rem;border-width:1.5px}
+.indice .grupo[style] button.feito em::before{font-size:.68rem}
+.indice .grupo[style] button[aria-current="true"] em{font-size:.64rem}
+.indice .grupo[style] button:not(:last-child)::before{left:17px}
+}
+footer{max-width:1200px;margin-inline:auto;padding:0 16px 24px;color:var(--muted);font-size:.84rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+.faixa .marca-t .sub-guia{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;margin-top:4px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff!important;border-radius:999px;padding:3px 12px 3px 9px;font-size:.74rem!important;font-weight:700;letter-spacing:.09em!important;text-transform:uppercase}
+.faixa .marca-t .sub-guia i{width:8px;height:8px;border-radius:50%;background:#FFCD07;box-shadow:0 0 0 3px rgba(255,205,7,.25)}
+.col-esq.lado{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:start}
+@media (max-width:760px){.col-esq.lado{grid-template-columns:minmax(0,1fr)}}
+
+.faixa .marca-t .sub-guia{background:#FFCD07!important;border:0!important;color:#2A1550!important;border-radius:5px!important;padding:3px 4px 3px 10px!important;font-size:.7rem!important;font-weight:800!important;letter-spacing:.11em!important;gap:8px!important;box-shadow:0 2px 8px -3px rgba(0,0,0,.35)}
+.faixa .marca-t .sub-guia em{font-style:normal;background:#2A1550;color:#FFCD07;border-radius:3px;padding:1px 6px;letter-spacing:.08em}
+
+/* ---------- cabeçalho no padrão gov.br (branco + azul institucional) ---------- */
+.faixa.br{background:none!important;border:0!important;color:inherit}
+.barra-branca{background:#fff;border-bottom:1px solid #E3E8EF}
+.barra-azul{background:#0C326F}
+.barra-in{max-width:1200px;margin-inline:auto;padding:10px 16px;display:flex;align-items:center;gap:16px}
+.barra-branca .logo-una{background:none!important;box-shadow:none!important;padding:0!important;height:auto;border-radius:0}
+.barra-branca .logo-una img{height:40px!important;mix-blend-mode:multiply}
+.sub-guia2{font-size:.74rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1351B4;padding-left:16px;border-left:1px solid #D9E1EA}
+.sub-guia2 b{color:#9AA7B8;margin-inline:2px}
+.abrir-cg{margin-left:auto;display:inline-flex;align-items:center;gap:8px;background:#FFCD07;color:#0C1F3F;text-decoration:none;font-weight:700;font-size:.95rem;border-radius:999px;padding:10px 22px;box-shadow:0 6px 16px -8px rgba(0,0,0,.35);white-space:nowrap}
+.abrir-cg svg{width:18px;height:18px;flex:none}
+.abrir-cg:hover{filter:brightness(.95)}
+.barra-azul .barra-in{padding-block:9px}
+.tit-guia{color:#fff;font-family:var(--f-display);font-weight:600;font-size:1.08rem;flex:1;min-width:0}
+.barra-azul .inicio{background:#fff!important;color:#0C326F!important;border:0!important;padding:7px 18px!important}
+.barra-azul .inicio:hover{background:#E5EEFB!important}
+.barra-azul .inicio[aria-current="true"]{background:#fff!important;color:#0C326F!important;box-shadow:0 0 0 3px rgba(255,255,255,.35)}
+@media (max-width:640px){.sub-guia2{display:none}.abrir-cg{padding:8px 14px;font-size:.85rem}.tit-guia{font-size:.95rem}}
+@media (max-width:420px){.abrir-cg span{display:none}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .barra-branca{background:#121D2D;border-color:#22324A}:root:not([data-theme="light"]) .barra-branca .logo-una{background:#fff!important;border-radius:8px;padding:3px 8px!important}:root:not([data-theme="light"]) .barra-branca .logo-una img{mix-blend-mode:normal}:root:not([data-theme="light"]) .sub-guia2{color:#7FAAF2;border-color:#22324A}}
+:root[data-theme="dark"] .barra-branca{background:#121D2D;border-color:#22324A}
+:root[data-theme="dark"] .barra-branca .logo-una{background:#fff!important;border-radius:8px;padding:3px 8px!important}
+:root[data-theme="dark"] .sub-guia2{color:#7FAAF2;border-color:#22324A}
+
+/* ---------- cabeçalho refinado ---------- */
+.barra-branca .barra-in{padding-block:12px;gap:18px}
+.tit-bloco{display:flex;flex-direction:column;gap:2px;padding-left:18px;border-left:1px solid #D9E1EA;min-width:0}
+.tit-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1351B4}
+.tit-eyebrow i{font-style:normal;color:#9AA7B8;margin-inline:3px}
+.tit-main{font-family:var(--f-display);font-weight:600;font-size:1.2rem;color:#0C326F;line-height:1.2}
+.barra-azul .barra-in{padding-block:8px;gap:16px}
+.tit-guia{display:none}
+.nav-guia{display:flex;gap:4px;flex-wrap:wrap;flex:1;min-width:0}
+.nav-bt{background:transparent;border:0;color:#fff;font-weight:600;font-size:.92rem;border-radius:999px;padding:7px 16px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.nav-bt svg{width:16px;height:16px}
+.nav-bt:hover{background:rgba(255,255,255,.12)}
+.barra-azul .nav-bt.inicio{background:transparent!important;color:#fff!important;padding:7px 16px!important;box-shadow:none!important}
+.barra-azul .nav-bt.inicio:hover{background:rgba(255,255,255,.12)!important}
+.nav-bt[aria-current="true"],.barra-azul .nav-bt.inicio[aria-current="true"]{background:#fff!important;color:#0C326F!important}
+.prog{display:flex;align-items:center;gap:10px;color:#C9D7EE;font-size:.82rem;font-weight:600;white-space:nowrap}
+.prog i{width:120px;height:6px;border-radius:999px;background:rgba(255,255,255,.2);overflow:hidden;display:block}
+.prog b{display:block;height:100%;width:0;background:#FFCD07;border-radius:999px;transition:width .3s}
+@media (max-width:900px){.prog{display:none}}
+@media (max-width:640px){.tit-bloco{border:0;padding-left:0}.tit-main{font-size:1rem}.tit-eyebrow{font-size:.66rem}.nav-bt{padding:6px 11px;font-size:.84rem}.barra-azul .nav-bt.inicio{padding:6px 11px!important}}
+@media (max-width:520px){#nav-desfecho{display:none}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tit-main{color:#E8EEF6}:root:not([data-theme="light"]) .tit-eyebrow{color:#7FAAF2}:root:not([data-theme="light"]) .tit-bloco{border-color:#22324A}}
+:root[data-theme="dark"] .tit-main{color:#E8EEF6} :root[data-theme="dark"] .tit-eyebrow{color:#7FAAF2} :root[data-theme="dark"] .tit-bloco{border-color:#22324A}
+.indice .grupo:first-child{border-top:0!important;padding-top:0!important;border-bottom:0!important}
+
+/* seta para baixo saindo do Início, apontando para a trilha */
+.barra-azul .nav-bt.inicio{position:relative}
+.barra-azul .nav-bt.inicio[aria-current="true"]::after{content:"";position:absolute;left:50%;top:calc(100% + 19px);transform:translateX(-50%);width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent;border-top:15px solid #1351B4;filter:drop-shadow(0 3px 4px rgba(12,50,111,.3));pointer-events:none;z-index:31}
+.barra-azul .nav-bt.inicio[aria-current="true"]::before{content:"";position:absolute;left:50%;top:calc(100% + 8px);transform:translateX(-50%);width:5px;height:13px;background:#1351B4;border-radius:2px;pointer-events:none;z-index:31}
+@media (prefers-reduced-motion:no-preference){.barra-azul .nav-bt.inicio[aria-current="true"]::after,.barra-azul .nav-bt.inicio[aria-current="true"]::before{animation:desce 1.4s ease-in-out infinite}}
+@keyframes desce{0%,100%{translate:0 0}50%{translate:0 4px}}
+.fotos.n3{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+.fotos.n3 .foto:first-child{grid-column:1/-1}
+.fotos.n3 .foto img{max-height:calc((100vh - 470px) / 2)}
+@media (max-width:900px){.fotos.n3{grid-template-columns:minmax(0,1fr)}.fotos.n3 .foto img{max-height:none}}
+
+/* sequência de telas (slides) */
+.seq{display:flex;flex-direction:column;gap:10px;min-width:0}
+.seq-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.seq-cap{display:flex;align-items:center;gap:10px;font-weight:600;color:var(--ink);min-width:0}
+.seq-num{width:28px;height:28px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-size:.9rem;flex:none}
+.seq-nav{display:flex;align-items:center;gap:6px}
+.seq-bt{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--c);background:var(--surface);color:var(--c);font-size:1.3rem;line-height:1;cursor:pointer;display:grid;place-items:center}
+.seq-bt:hover{background:var(--c);color:#fff}
+.seq-cont{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);min-width:52px;text-align:center}
+.seq-zoom{display:block;width:100%;padding:0;border:1px solid var(--rule-2);border-radius:12px;overflow:hidden;background:#fff;cursor:zoom-in}
+.seq-zoom img{display:block;width:100%;height:auto;max-height:calc(100vh - 470px);object-fit:contain}
+.seq-th{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.seq-t{position:relative;padding:0;border:2px solid var(--rule);border-radius:8px;overflow:hidden;background:#fff;cursor:pointer;aspect-ratio:16/9;max-width:100%}
+.seq-t img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;opacity:.75}
+.seq-t b{position:absolute;left:4px;top:4px;width:20px;height:20px;border-radius:50%;background:var(--surface);color:var(--ink-2);font-size:.7rem;display:grid;place-items:center;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.seq-t.on{border-color:var(--c)}
+.seq-t.on img{opacity:1}
+.seq-t.on b{background:var(--c);color:#fff}
+@media (max-width:900px){.seq-zoom img{max-height:none}}
+
+/* ---------- cabeçalho v2: onde estou + progresso por fase ---------- */
+.onde{margin-left:auto;display:flex;align-items:center;gap:12px;padding-left:18px;border-left:1px solid #D9E1EA}
+.ring{position:relative;width:46px;height:46px;flex:none}
+.ring svg{width:46px;height:46px;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:4.5}
+.ring .trk{stroke:#E3E8EF}
+.ring .val{stroke:#1351B4;stroke-linecap:round;transition:stroke-dashoffset .4s ease,stroke .3s}
+.ring span{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:.95rem;color:#0C326F}
+.ring-lab{display:flex;flex-direction:column;line-height:1.25}
+.ring-lab b{font-family:var(--f-display);font-weight:600;font-size:.92rem;color:#0C326F}
+.ring-lab span{font-size:.8rem;color:#66778C}
+.migalha{display:flex;align-items:center;gap:8px;color:#C9D7EE;font-size:.84rem;white-space:nowrap;min-width:0}
+.migalha b{color:#fff;font-weight:600;overflow:hidden;text-overflow:ellipsis;max-width:340px}
+.migalha span::after{content:"›";margin-left:8px;color:#7FA3D9}
+.fases-linha{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;background:#0C326F;padding:0 0 0}
+.fases-linha i{display:block;height:4px;background:#2B4C80;transition:background .3s}
+.fases-linha i.cur{height:4px;box-shadow:0 0 8px rgba(255,255,255,.35)}
+@media (max-width:900px){.migalha{display:none}}
+@media (max-width:640px){.onde{padding-left:10px;border-left:0}.ring-lab{display:none}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .onde{border-color:#22324A}:root:not([data-theme="light"]) .ring .trk{stroke:#22324A}:root:not([data-theme="light"]) .ring span,:root:not([data-theme="light"]) .ring-lab b{color:#E8EEF6}}
+:root[data-theme="dark"] .onde{border-color:#22324A} :root[data-theme="dark"] .ring .trk{stroke:#22324A} :root[data-theme="dark"] .ring span,:root[data-theme="dark"] .ring-lab b{color:#E8EEF6}
+#prog{display:none!important}
+.como{flex-direction:row!important;align-items:center;justify-content:space-between;gap:24px}
+.como>div:first-child{flex:1;min-width:0}
+.como .cta-linha{flex:none}
+@media (max-width:640px){.como{flex-direction:column!important;align-items:flex-start}}
+.capa{padding:clamp(28px, 20px + 3vw, 56px) clamp(18px, 10px + 3vw, 48px) clamp(26px, 18px + 2vw, 40px);text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;background:radial-gradient(120% 70% at 50% 0%,color-mix(in srgb,#1351B4 10%,var(--surface)) 0%,var(--surface) 70%)}
+.cp-tag{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#1351B4;background:color-mix(in srgb,#1351B4 10%,var(--surface));border-radius:999px;padding:5px 14px}
+.capa h2{font-family:var(--f-display);font-weight:700;font-size:clamp(2rem, 1.4rem + 2.4vw, 3.1rem);line-height:1.08;letter-spacing:-.02em;color:var(--ink);margin:6px 0 0;max-width:18ch}
+.cp-sub{margin:0;font-size:clamp(1.05rem, .95rem + .4vw, 1.25rem);color:var(--ink-2)}
+.cp-trilha{display:flex;align-items:flex-start;justify-content:center;gap:0;margin:clamp(22px, 16px + 2vw, 38px) 0 clamp(18px, 14px + 1vw, 28px);width:100%;max-width:820px}
+.cp-et{flex:1 1 0;min-width:0;background:none;border:0;padding:8px 6px 10px;border-radius:16px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font:inherit;color:inherit;transition:background .15s, transform .15s}
+.cp-et:hover{background:color-mix(in srgb,var(--ec) 7%,transparent);transform:translateY(-2px)}
+.cp-et:focus-visible{outline:3px solid var(--ec);outline-offset:2px}
+.cp-ic{position:relative;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;background:var(--ec);box-shadow:0 10px 24px -10px var(--ec);margin-bottom:8px}
+.cp-ic svg{width:34px;height:34px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.cp-ic i{position:absolute;top:-4px;right:-4px;width:26px;height:26px;border-radius:50%;background:var(--surface);color:var(--ec);font-style:normal;font-family:var(--f-display);font-weight:700;font-size:.85rem;display:grid;place-items:center;box-shadow:0 0 0 2px var(--ec)}
+.cp-et b{font-family:var(--f-display);font-weight:700;font-size:1.08rem;color:var(--ink)}
+.cp-et small{font-size:.86rem;color:var(--muted);line-height:1.3;max-width:22ch}
+.cp-et em{font-style:normal;font-size:.76rem;font-weight:700;color:var(--ec);margin-top:4px}
+.cp-seta{flex:0 0 clamp(28px, 4vw, 64px);height:2px;margin-top:46px;background:repeating-linear-gradient(90deg,var(--rule) 0 6px,transparent 6px 11px);position:relative}
+.cp-seta::after{content:"";position:absolute;right:-2px;top:-4px;border:5px solid transparent;border-left:7px solid var(--muted);border-right:0}
+.cp-acoes{display:flex;flex-direction:column;align-items:center;gap:12px}
+.cp-go{background:#1351B4;color:#fff;border:0;border-radius:999px;padding:16px 40px;font-family:var(--f-display);font-weight:700;font-size:1.15rem;cursor:pointer;box-shadow:0 14px 28px -12px rgba(19,81,180,.7);transition:transform .15s, background .15s}
+.cp-go:hover{background:#0C326F;transform:translateY(-1px)}
+.cp-link{background:none;border:0;font:inherit;font-size:.95rem;font-weight:600;color:#1351B4;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+:root[data-theme="dark"] .cp-tag,:root[data-theme="dark"] .cp-link{color:#8AB4FF}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cp-tag,:root:not([data-theme="light"]) .cp-link{color:#8AB4FF}}
+@media (max-width:640px){.cp-trilha{flex-direction:column;align-items:stretch;gap:4px}.cp-seta{display:none}.cp-et{flex-direction:row;flex-wrap:wrap;text-align:left;align-items:center;column-gap:14px;padding:10px;border:1px solid var(--rule)}.cp-ic{width:52px;height:52px;margin:0;grid-row:span 3}.cp-ic svg{width:24px;height:24px}.cp-et b,.cp-et small,.cp-et em{flex:1 1 calc(100% - 70px)}.cp-et{display:grid;grid-template-columns:52px 1fr;row-gap:0}.cp-et small{max-width:none}}
+.tit-bloco .tit-spu{font-family:var(--f-display);font-weight:800;font-size:1.45rem;line-height:1;color:#0C326F;letter-spacing:-.01em}
+.tit-bloco .tit-sub{font-size:.82rem;color:#333;line-height:1.2;white-space:nowrap}
+@media (max-width:380px){.tit-bloco .tit-sub{white-space:normal}}
+.barra-branca .tit-bloco{border-left:1.5px solid #9AA7B8!important;padding-left:14px!important;gap:3px}
+:root[data-theme="dark"] .tit-bloco .tit-spu{color:#8AB4FF} :root[data-theme="dark"] .tit-bloco .tit-sub{color:#C9D3E0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .tit-bloco .tit-spu{color:#8AB4FF}:root:not([data-theme="light"]) .tit-bloco .tit-sub{color:#C9D3E0}}
+.barra-branca .barra-in{display:flex;align-items:center}
+.man-nome{display:flex;flex-direction:column;gap:2px;min-width:0}
+.man-nome small{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#1351B4}
+.man-nome b{font-family:var(--f-display);font-weight:700;font-size:clamp(1.05rem, .9rem + .5vw, 1.3rem);color:#0C326F;line-height:1.2}
+.barra-branca .logo-una{margin-left:auto}
+:root[data-theme="dark"] .man-nome b{color:#E8EEF6} :root[data-theme="dark"] .man-nome small{color:#8AB4FF}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .man-nome b{color:#E8EEF6}:root:not([data-theme="light"]) .man-nome small{color:#8AB4FF}}
+@media (max-width:700px){.man-nome small{display:none}.man-nome b{font-size:.95rem;line-height:1.15}.barra-branca .tit-bloco{display:none}.barra-branca .barra-in{gap:10px}}
+@keyframes brilha{0%,100%{filter:drop-shadow(0 0 0 rgba(91,155,255,0))}50%{filter:drop-shadow(0 0 6px rgba(91,155,255,1)) drop-shadow(0 0 12px rgba(91,155,255,.75))}}
+.barra-azul .nav-bt.inicio[aria-current="true"]::after{border-top-color:#1351B4!important;animation:desce 1.4s ease-in-out infinite, brilha 1.4s ease-in-out infinite!important}
+.barra-azul .nav-bt.inicio[aria-current="true"]::before{background:#1351B4!important;animation:desce 1.4s ease-in-out infinite, brilha 1.4s ease-in-out infinite!important}
+@media (prefers-reduced-motion: reduce){.barra-azul .nav-bt.inicio[aria-current="true"]::after,.barra-azul .nav-bt.inicio[aria-current="true"]::before{animation:none!important;filter:drop-shadow(0 0 6px rgba(91,155,255,.9))}}
+body.na-capa .wrap{grid-template-columns:minmax(0,1fr)!important;max-width:1000px}
+body.na-capa .indice{display:none!important}
+body.na-capa .barra-azul .nav-bt.inicio::after,body.na-capa .barra-azul .nav-bt.inicio::before{display:none!important}
+body.na-capa .passo{border-left:1px solid var(--rule);padding-bottom:0}
+body.na-capa .passo>.capa{margin-inline:0}
+/* ---------- capa limpa (padrão Manual do Usuário) + selo do Guia do Profissional ---------- */
+:root{--gp:#1351B4}
+.barra-azul .onde{display:none!important}
+.barra-branca .barra-in{gap:18px}
+.barra-branca .logo-una img{height:40px!important}
+.man-nome b{font-size:clamp(1.05rem,.9rem + .5vw,1.3rem)}
+.man-nome small.selo-guia{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;background:var(--gp);color:#fff;border-radius:6px;padding:3px 10px 3px 8px;font-size:.72rem;letter-spacing:.1em;margin-bottom:3px;box-shadow:0 4px 10px -6px var(--gp)}
+.man-nome small.selo-guia svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.capa .cp-tag{color:#fff;background:var(--gp)}
+.cp-trilha{max-width:980px}
+.cp-et small{max-width:18ch}
+@media (max-width:900px){.cp-seta{flex-basis:14px}}
+@media (max-width:700px){.man-nome small.selo-guia{display:inline-flex}}
+:root[data-theme="dark"]{--gp:#2F6FD6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--gp:#2F6FD6}}
+body.na-capa .fases-linha{visibility:hidden}
+.migalha{display:none!important}
+.man-nome small.selo-guia{white-space:nowrap}
+@media (max-width:700px){.barra-branca .logo-una img{height:26px!important}.man-nome small.selo-guia{font-size:.62rem;padding:2px 8px 2px 6px}}
+
+/* sem faixa azul: navegação pelo índice */
+.fases-linha{display:none!important}
+
+.barra-azul .barra-in{min-height:52px}
+.tit-faixa{color:#fff;font-family:var(--f-display);font-weight:600;font-size:clamp(1.05rem,.9rem + .5vw,1.3rem);line-height:1.2}
+.man-nome small.selo-guia{margin-bottom:0;font-size:.8rem;padding:5px 12px 5px 10px}
+.man-nome small.selo-guia svg{width:16px;height:16px}
+.indice .ind-top{display:flex;flex-direction:row;gap:6px;padding-bottom:8px!important;border-bottom:1px solid var(--rule)!important;margin-bottom:2px}
+.indice .ind-top button{flex:1;justify-content:center;align-items:center;gap:6px;border:1px solid var(--rule-2);border-radius:999px!important;padding:5px 8px!important;font-size:.8rem!important;font-weight:600;color:var(--gov);background:var(--surface)}
+.indice .ind-top button em{font-family:var(--f-body);font-size:.85rem;color:inherit;min-width:0}
+.indice .ind-top button:hover{background:var(--gov-soft)}
+.indice .ind-top button[aria-current="true"]{background:var(--gov);color:#fff;border-color:var(--gov);border-radius:999px!important}
+.indice .ind-top button[aria-current="true"]::after{display:none}
+.indice .ind-top button.feito{opacity:1}
+@media (min-width:901px){.indice{top:92px!important}}
+
+/* padrão Manual do Gestor de Unidade: sobretítulo simples + título na faixa branca; faixa com Início e Resumo */
+.man-nome small.selo-guia{background:none!important;box-shadow:none!important;color:#1351B4!important;padding:0!important;font-size:.72rem!important;letter-spacing:.1em;margin-bottom:2px!important;border-radius:0}
+.man-nome b{color:#0C326F}
+.barra-azul .barra-in{min-height:0}
+.barra-azul .nav-bt.inicio::after,.barra-azul .nav-bt.inicio::before{display:none!important}
+@media (min-width:901px){.indice{top:150px!important}}
+
+.vitrine-lk{margin-left:auto;display:inline-flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-weight:600;font-size:.9rem;border:1.5px solid rgba(255,255,255,.55);border-radius:999px;padding:6px 14px;white-space:nowrap}
+.vitrine-lk svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;flex:none}
+.vitrine-lk i{font-style:normal;opacity:.8}
+.vitrine-lk:hover{background:#fff;color:#0C326F;border-color:#fff}
+@media (max-width:760px){.vitrine-lk span{display:none}.vitrine-lk{padding:6px 10px}}
+.vitrine-rod{color:var(--gov);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+/* cor própria do Guia do Profissional: roxo (mesma família da Vitrine) */
+:root{--gp-band:#4B2B8F}
+.barra-azul{background:var(--gp-band)!important}
+.nav-bt[aria-current="true"],.barra-azul .nav-bt.inicio[aria-current="true"]{color:var(--gp-band)!important}
+.vitrine-lk:hover{color:var(--gp-band)}
+.man-nome small.selo-guia{color:#5B2C9F!important}
+:root[data-theme="dark"] .man-nome small.selo-guia{color:#B99BF0!important}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .man-nome small.selo-guia{color:#B99BF0!important}}
+
+/* capa: sem botão Início; Começar com pulso leve */
+body.na-capa .barra-azul .nav-bt.inicio{display:none!important}
+@keyframes pulsoGo{0%{box-shadow:0 14px 28px -12px rgba(19,81,180,.7),0 0 0 0 rgba(19,81,180,.45)}70%{box-shadow:0 14px 28px -12px rgba(19,81,180,.7),0 0 0 16px rgba(19,81,180,0)}100%{box-shadow:0 14px 28px -12px rgba(19,81,180,.7),0 0 0 0 rgba(19,81,180,0)}}
+@media (prefers-reduced-motion:no-preference){.cp-go{animation:pulsoGo 2s ease-out infinite}.cp-go:hover{animation-play-state:paused}}
+
+/* sobretítulo em pílula cheia (padrão Manual do Usuário) */
+.man-nome small.selo-guia{display:inline-flex!important;align-self:flex-start;background:var(--gp-band)!important;color:#fff!important;padding:4px 12px!important;border-radius:999px!important;font-size:.8rem!important;font-weight:700;letter-spacing:.08em!important;margin-bottom:5px!important;box-shadow:0 4px 10px -6px var(--gp-band)!important;white-space:nowrap}
+:root[data-theme="dark"] .man-nome small.selo-guia{color:#fff!important;background:#6E4BC2!important}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .man-nome small.selo-guia{color:#fff!important;background:#6E4BC2!important}}
+@media (max-width:700px){.man-nome small.selo-guia{display:inline-flex!important;font-size:.64rem!important;padding:3px 9px!important;margin-bottom:3px!important}}
+
+/* "Clique na imagem e visualize" + selo "Amplie a imagem" sobre a tela */
+.clique-vis{margin:0;font-family:var(--f-display);font-weight:600;font-size:1.05rem;color:var(--ink);grid-column:1/-1}
+.zoom,.seq-zoom{position:relative}
+.zoom::after,.seq-zoom::after{content:"Amplie a imagem";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(19,81,180,.55);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35);font-family:var(--f-body);font-size:.78rem;font-weight:700;padding:4px 12px;border-radius:999px;box-shadow:0 6px 18px -6px rgba(0,0,0,.55);pointer-events:none;white-space:normal;text-align:center;line-height:1.25;width:max-content;max-width:78%;transition:opacity .2s,background .2s}
+.zoom:hover::after,.seq-zoom:hover::after{background:rgba(19,81,180,.85)}
+.foto figcaption .amp{display:none}
+
+/* tela ampliada: passo, legenda amarela, navegação entre todas as telas */
+.lupa{cursor:default;gap:10px;background:rgba(6,12,24,.94)!important}
+.lupa-cab{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;max-width:min(1100px,100%)}
+.lupa-pas{color:#fff;border-radius:999px;padding:6px 18px;font-size:clamp(.95rem, .85rem + .4vw, 1.15rem);font-weight:700;letter-spacing:.02em}
+.lupa-leg{background:#FFCD07;color:#1B1B1B;font-family:var(--f-display);font-weight:700;font-size:clamp(1.1rem, .95rem + .6vw, 1.45rem);line-height:1.3;padding:8px 20px;border-radius:12px;box-shadow:0 8px 24px -8px rgba(0,0,0,.6)}
+.lupa-meio{display:flex;align-items:center;gap:12px;width:100%;justify-content:center;min-height:0;flex:0 1 auto}
+.lupa .lupa-meio img{max-width:calc(100% - 120px);max-height:calc(100vh - 210px)}
+.lupa .lupa-nav{flex:none;width:48px;height:48px;border-radius:50%;padding:0;font-size:1.8rem;line-height:1;display:grid;place-items:center}
+.lupa .lupa-nav:hover{background:#FFCD07}
+.lupa-pe{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
+.lupa-cont{color:rgba(255,255,255,.8);font-size:.85rem}
+.lupa-dica{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:999px;padding:5px 14px;font-size:.82rem;font-weight:600}
+.lupa-dica kbd{font-family:var(--f-mono);font-size:.78rem;background:#fff;color:#0F1E33;border-radius:5px;padding:1px 6px}
+@media (max-width:600px){.lupa .lupa-meio img{max-width:calc(100% - 84px)}.lupa .lupa-nav{width:36px;height:36px;font-size:1.4rem}.lupa-dica{display:none}}
+
+/* Capa e passos cabem na tela (14", 24", 32") */
+@media (min-width:901px){
+ .capa{padding:clamp(14px,3.2vh,56px) clamp(18px,3vw,56px) clamp(14px,3vh,48px);gap:clamp(4px,1vh,14px)}
+ .capa h2{max-width:none;font-size:clamp(1.9rem,5.6vh,4rem);margin:0}
+ .cp-sub{font-size:clamp(1rem,2.3vh,1.6rem)}
+ .cp-trilha{max-width:min(1400px,92%);margin:clamp(10px,3.6vh,56px) 0 clamp(10px,3.4vh,52px)}
+ .cp-ic{width:clamp(54px,9.5vh,124px);height:clamp(54px,9.5vh,124px);margin-bottom:clamp(4px,1vh,12px)}
+ .cp-ic svg{width:45%;height:45%}
+ .cp-ic i{width:clamp(22px,3vh,34px);height:clamp(22px,3vh,34px);font-size:clamp(.75rem,1.5vh,1.05rem)}
+ .cp-seta{margin-top:calc(clamp(54px,9.5vh,124px)/2 + 8px)}
+ .cp-et{gap:clamp(2px,.5vh,6px)}
+ .cp-et b{font-size:clamp(1rem,2.4vh,1.6rem);white-space:nowrap}
+ .cp-et small{font-size:clamp(.82rem,1.8vh,1.2rem);max-width:24ch}
+ .cp-go{padding:clamp(10px,1.9vh,22px) clamp(32px,3vw,56px);font-size:clamp(1.05rem,2.2vh,1.5rem)}
+}
+
+/* Passos cabem na tela: cartão com altura da janela, botões sempre visíveis */
+@media (min-width:901px){
+ :root{--larg:clamp(1200px,72vw,1760px)}
+ .wrap,.barra-in,footer{max-width:var(--larg)}
+ .wrap{padding-block:clamp(10px,2vh,24px) 24px;grid-template-columns:clamp(310px,20vw,400px) minmax(0,1fr);gap:clamp(18px,1.8vw,32px)}
+ .indice{top:calc(var(--topo,139px) + clamp(10px,2vh,24px))!important;max-height:calc(100dvh - var(--topo,139px) - 24px)}
+ body.em-passo main.passo{max-height:calc(100dvh - var(--topo,139px) - clamp(10px,2vh,24px) - 34px);overflow-y:auto;overscroll-behavior:contain;gap:clamp(8px,1.6vh,18px);padding-bottom:0;scrollbar-width:thin}
+ body.em-passo .passo>.cab{padding-block:clamp(8px,1.6vh,18px) clamp(8px,1.4vh,16px);gap:clamp(2px,.5vh,6px)}
+ body.em-passo .cab h2{font-size:clamp(1.2rem,1rem + 1.4vh,2rem)}
+ body.em-passo .cab p{font-size:clamp(.95rem,.8rem + .7vh,1.25rem)}
+ body.em-passo .passo .seguir{position:sticky;bottom:0;z-index:3;background:var(--surface);margin-top:auto;padding-block:clamp(8px,1.4vh,14px);gap:12px}
+ body.em-passo .seg{padding-block:clamp(6px,1.1vh,14px)}
+ body.em-passo .foto img,body.em-passo .fotos.n2 .foto img{max-height:calc(100dvh - var(--topo,139px) - 300px);width:auto;max-width:100%;object-fit:contain}
+}
+@media (min-width:2200px) and (min-height:1150px){html{font-size:115%}}
+@media (min-width:901px){body.em-passo .passo>*:not(.seguir){zoom:var(--esc,1)} body.em-passo .cab p{max-width:none}}
+@media (min-width:901px) and (max-height:720px){.barra-branca .barra-in{padding-block:4px!important}.barra-azul .barra-in{padding-block:3px!important;min-height:0!important}.barra-azul .nav-guia a,.barra-azul .nav-guia button,.vitrine-lk{padding-block:5px!important}.man-nome{gap:2px!important}}
+
+/* Capa ocupa a tela toda */
+@media (min-width:901px){
+ body.na-capa .wrap{max-width:var(--larg)!important;padding-block:clamp(10px,1.6vh,22px) 10px}
+ body.na-capa main.passo{min-height:calc(100dvh - var(--topo,139px) - clamp(10px,1.6vh,22px) - 36px);display:flex}
+ body.na-capa .capa{flex:1;justify-content:space-evenly;gap:clamp(6px,1.4vh,20px);padding-block:clamp(14px,3vh,48px)}
+ body.na-capa .capa h2{font-size:clamp(2rem,7vh,5rem)}
+ body.na-capa .cp-sub{font-size:clamp(1.05rem,2.7vh,1.9rem)}
+ body.na-capa .cp-trilha{max-width:min(1500px,96%);margin-block:clamp(8px,2.4vh,40px)}
+ body.na-capa .cp-ic{width:clamp(60px,13vh,170px);height:clamp(60px,13vh,170px);margin-bottom:clamp(6px,1.4vh,16px)}
+ body.na-capa .cp-ic i{width:clamp(24px,3.8vh,46px);height:clamp(24px,3.8vh,46px);font-size:clamp(.8rem,1.9vh,1.35rem)}
+ body.na-capa .cp-seta{flex-basis:clamp(30px,4vw,90px);margin-top:calc(clamp(60px,13vh,170px)/2 + 8px)}
+ body.na-capa .cp-et b{font-size:clamp(1.05rem,3vh,2.1rem)}
+ body.na-capa .cp-et small{font-size:clamp(.85rem,2.1vh,1.45rem);max-width:26ch}
+ body.na-capa .cp-go{font-size:clamp(1.1rem,2.8vh,1.9rem);padding:clamp(12px,2.2vh,26px) clamp(40px,4vw,80px)}
+ body.na-capa footer{padding-bottom:10px}
+ body.na-capa footer::before,body.na-capa footer hr{margin:0}
+}
+
+/* Seta da próxima figura: fora da imagem, amarela */
+.lupa .lupa-nav{width:64px!important;height:64px!important;font-size:2.2rem!important;background:#FFCD07!important;color:#111!important;border:0!important;box-shadow:0 6px 18px rgba(0,0,0,.35);font-weight:700}
+.lupa .lupa-nav:hover{background:#FFE15A!important}
+.lupa-meio img{max-width:calc(100% - 170px)!important}
+/* Selos 1.1, 1.2 no índice */
+.indice .grupo[style] button em{width:auto!important;min-width:30px!important;padding:0 4px!important;border-radius:999px!important;font-size:.68rem!important}
+.indice .grupo[style] button.feito em{font-size:0!important;min-width:26px!important}
+
+.lupa-leg,.lupa-dica{display:none!important}
+
+.passo>.cab.cab-passo{display:none!important}
+body.em-passo .passo{padding-top:clamp(14px,2.4vh,26px)}
+
+/* Rodapé do passo limpo: só o botão de avançar, em pílula na cor da fase */
+.passo .seguir{display:flex!important;justify-content:flex-end;grid-template-columns:none}
+.passo .seguir .seg.ant{display:none!important}
+.passo .seguir .seg.prox{flex:0 1 auto;max-width:100%;width:auto;display:inline-flex!important;flex-direction:row!important;align-items:center!important;gap:14px;border-radius:999px;background:var(--c)!important;border:0!important;color:#fff!important;padding:clamp(10px,1.6vh,16px) clamp(10px,1vw,14px) clamp(10px,1.6vh,16px) clamp(20px,1.8vw,30px)!important;box-shadow:0 12px 26px -14px var(--c);text-align:left}
+.passo .seguir .seg.prox small{display:none!important}
+.passo .seguir .seg.prox span{font-family:var(--f-display);font-weight:700;font-size:clamp(1rem,.9rem + .5vh,1.25rem);color:#fff!important}
+.passo .seguir .seg.prox::after{content:"→";flex:none;width:clamp(34px,4vh,44px);height:clamp(34px,4vh,44px);border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;font-size:1.15rem;color:#fff}
+.passo .seguir .seg.prox:hover{filter:brightness(1.08)}
+
+/* Grupo de 6 telas: todas visíveis, 3 por linha */
+.fotos.n5{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 14px;align-items:start}
+.fotos.n5 .clique-vis{grid-column:1/-1}
+.fotos.n5 .foto .zoom{width:100%}
+.fotos.n5 .foto img{width:100%;height:auto;max-height:none!important;object-fit:contain}
+.fotos.n5 figcaption{font-size:.85rem;line-height:1.3}
+.fotos.n5 figcaption .amp{display:none}
+@media (max-width:700px){.fotos.n5{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.corpo:has(.fotos.n5){grid-template-columns:minmax(0,250px) minmax(0,1fr)}
+.fotos.n5 .foto .zoom{aspect-ratio:16/10;display:grid;place-items:center;background:#fff}
+.fotos.n5 .foto img{width:100%;height:100%;object-fit:contain}
+
+.fotos.n2:has(.larga){grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.corpo:has(.fotos .larga){grid-template-columns:minmax(0,1fr)!important}
+.corpo:has(.fotos .larga) .faca ol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
+.corpo:has(.fotos .larga) .clique-vis{grid-column:1/-1}
+.fotos .foto.larga .zoom{width:100%}
+.fotos .foto.larga img{width:100%;height:auto;max-height:none!important}
+
+.fotos.n5{grid-template-columns:repeat(12,minmax(0,1fr))!important}
+.fotos.n5 .foto{grid-column:span 4}
+.fotos.n5 .foto:nth-of-type(1),.fotos.n5 .foto:nth-of-type(2){grid-column:span 6}
+.fotos.n5 .foto:nth-of-type(1) .zoom,.fotos.n5 .foto:nth-of-type(2) .zoom{aspect-ratio:auto}
+@media (max-width:700px){.fotos.n5 .foto{grid-column:span 6}.fotos.n5 .foto:nth-of-type(1),.fotos.n5 .foto:nth-of-type(2){grid-column:1/-1}}
+
+/* Hierarquia: os passos começam abaixo da 1ª letra do nome da fase */
+.indice .grupo>strong i{display:none!important}
+.indice .grupo>strong{padding-left:8px!important;gap:0!important}
+.indice .gnum{display:inline-block;width:30px;flex:none}
+.indice .grupo[style] button{padding-left:38px!important}
+.indice .grupo[style] button:not(:last-child)::before{left:52px!important}
+.indice .grupo[style] button em{padding:0 5px!important;box-sizing:border-box}
+/* Coluna ocupa a altura da tela, com espaço entre os itens */
+@media (min-width:901px){
+ body.em-passo .indice{height:calc(100dvh - var(--topo,139px) - clamp(10px,2vh,24px) - 34px);max-height:none;display:flex!important;flex-direction:column;gap:0!important;padding-block:clamp(8px,1.4vh,18px)!important;box-sizing:border-box}
+ body.em-passo .indice .grupo[style]{flex:var(--n) 1 0;display:flex;flex-direction:column;min-height:0}
+ body.em-passo .indice .grupo[style]>strong{flex:1 1 0;display:flex;align-items:center;min-height:0;font-size:clamp(.68rem,.55rem + .45vh,.85rem)!important}
+ body.em-passo .indice .grupo[style] button{flex:1 1 0;min-height:0!important;max-height:52px;font-size:clamp(.82rem,.6rem + .7vh,1.08rem)!important}
+ body.em-passo .indice .grupo[style] button.feito em{font-size:0!important}
+ body.em-passo .indice .grupo[style] button em{width:clamp(32px,3.8vh,42px)!important;min-width:0!important;place-items:center!important;justify-items:center!important;height:clamp(20px,2.8vh,28px)!important;font-size:clamp(.62rem,.5rem + .4vh,.8rem)!important}
+}
+
+/* Autoria na faixa do topo; rodapé some no computador para nada rolar */
+.autoria-topo{display:none}
+@media (min-width:901px){
+ .autoria-topo{display:none!important}
+ .barra-azul .vitrine-lk{margin-left:auto!important}
+ footer{display:block!important;position:fixed;left:0;right:0;bottom:0;max-width:var(--larg)!important;margin-inline:auto;padding:0 16px 6px!important;text-align:right;font-size:clamp(.74rem,.62rem + .35vh,.9rem);pointer-events:none;background:none}
+ footer p{margin:0}
+ footer .autoria{border-top:0!important;padding-top:0!important;font-size:inherit}
+ footer::before,footer::after{display:none!important}
+ html,body{overflow:hidden}
+ body:not(.na-capa):not(.em-passo) main.passo{max-height:calc(100dvh - var(--topo,139px) - clamp(10px,2vh,24px) - 34px);overflow-y:auto;scrollbar-width:thin}
+ .wrap{padding-bottom:12px!important}
+}
+
+/* Capa: nomes das etapas com folga entre si */
+@media (min-width:901px){
+ body.na-capa .cp-et{padding-inline:clamp(6px,.8vw,16px)!important}
+ body.na-capa .cp-et b{white-space:nowrap!important;font-size:clamp(1rem,.5rem + 1.45vh,1.7rem)!important}
+ body.na-capa .cp-et small{font-size:clamp(.82rem,.5rem + 1vh,1.2rem)!important}
+ body.na-capa .cp-trilha{max-width:100%!important}
+ body.na-capa .cp-seta{flex-basis:clamp(14px,1.8vw,48px)!important}
+}
+
+/* Botão de avançar pisca depois de 4 segundos no passo */
+@keyframes piscaAvanca{0%,100%{transform:scale(1);box-shadow:0 12px 26px -14px var(--c),0 0 0 0 color-mix(in srgb,var(--c) 55%,transparent)}50%{transform:scale(1.04);box-shadow:0 12px 26px -14px var(--c),0 0 0 12px color-mix(in srgb,var(--c) 0%,transparent)}}
+@keyframes surgeAvanca{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.passo .seguir .seg.prox{opacity:0;pointer-events:none}
+.passo .seguir .seg.prox.vis{opacity:1;pointer-events:auto;animation:surgeAvanca .5s ease-out}
+@media (prefers-reduced-motion:no-preference){.passo .seguir .seg.prox.vis.pisca{animation:piscaAvanca 1.4s ease-in-out infinite}.passo .seguir .seg.prox.vis.pisca:hover{animation-play-state:paused}}
+
+.passo .seguir .seg.prox.vis.ja{animation:none}
+/* Itens da coluna ainda não visitados ficam esmaecidos */
+.indice .grupo[style] button.futuro span{opacity:.45}
+.indice .grupo[style] button.futuro em{background:var(--surface)!important;color:color-mix(in srgb,var(--c) 45%,var(--surface))!important;border-color:color-mix(in srgb,var(--c) 40%,var(--surface))!important}
+.indice .grupo[style] button.futuro:not(:last-child)::before{background:color-mix(in srgb,var(--c) 18%,var(--rule))}
+.indice .grupo[style] button.futuro:hover span{opacity:.8}
+</style>
+</head>
+<body>
+
+
+<header class="topo">
+  <div class="topo-in">
+    <div class="faixa br">
+      <div class="barra-branca"><div class="barra-in"><div class="man-nome"><small class="selo-guia">Guia do Profissional (Servidor SPU)</small><b>Como atender uma tarefa na CentralGov</b></div>
+        <div class="logo-una selo" title="Início"><img src="imagens/logo-govbr-centralgov.png" alt="gov.br CentralGov"></div>
+        <div class="tit-bloco"><b class="tit-spu">SPU</b><span class="tit-sub">Secretaria do Patrimônio da União</span></div>
+        </div></div>
+      <div class="barra-azul"><div class="barra-in">
+        <nav class="nav-guia" aria-label="Seções do guia">
+          <button class="inicio nav-bt" id="inicio" title="Voltar ao início da trilha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg><span class="t">Início</span></button>
+          <button class="nav-bt" id="nav-resumo">Resumo para consulta</button>
+        </nav>
+        <span class="autoria-topo">Guia eletrônico elaborado por: <b>CEPRO/CGGES/DEGOV</b></span><a class="vitrine-lk" href="https://spu-projetoseprocessos.github.io/Vitrine_Manuais_CentralGov_SPU/" target="_blank" rel="noopener" title="Abrir a Manuais CentralGov"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>Manuais CentralGov</span><i aria-hidden="true">↗</i></a>
+        <div class="prog" id="prog" hidden><span id="prog-t"></span><i><b id="prog-b"></b></i></div>
+        <div class="onde" aria-live="polite">
+          <div class="ring"><svg viewBox="0 0 44 44" aria-hidden="true"><circle class="trk" cx="22" cy="22" r="18"/><circle class="val" id="ring-v" cx="22" cy="22" r="18"/></svg><span id="ring-t">0</span></div>
+          <div class="ring-lab"><b id="ring-f">Início</b><span id="ring-s">16 passos</span></div>
+        </div>
+        <div class="migalha"><span>Você está em</span><b id="mig">Início</b></div>
+      </div></div>
+      <div class="fases-linha" id="flinha" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <nav class="trilho" id="trilho" aria-label="Fases" hidden></nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="indice" id="indice" aria-label="Passos"></nav>
+  <main lang="pt-BR" class="passo" id="passo" aria-live="polite" tabindex="-1"></main>
+</div>
+
+
+<div class="lupa" id="lupa" hidden role="dialog" aria-modal="true" aria-label="Tela ampliada"><div class="lupa-cab"><span class="lupa-pas" id="lupa-pas"></span><b class="lupa-leg" id="lupa-leg"></b></div><div class="lupa-meio"><button class="lupa-nav" id="lupa-ant" aria-label="Tela anterior">‹</button><img id="lupa-img" alt=""><button class="lupa-nav" id="lupa-prox" aria-label="Próxima tela">›</button></div><div class="lupa-pe"><span class="lupa-dica">Use as setas <kbd>←</kbd> <kbd>→</kbd> do teclado para voltar e avançar</span><span class="lupa-cont" id="lupa-cont"></span><button id="lupa-x">Fechar ✕</button></div></div>
+<footer><p class="autoria">Guia eletrônico elaborado por: <b>CEPRO/CGGES/DEGOV</b></p></footer>
+
+<script>
+const S = {
+  ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  cancel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12"/></svg>',
+  exig:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17.2v.1"/></svg>',
+  transf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h14l-3-3M20 16H6l3 3"/></svg>',
+  baixar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
+  cumprir:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 11v9H4v-9zM7 11l4-7c1.5 0 2.3 1 2 2.5L12.5 10H18a2 2 0 0 1 2 2.3l-1.2 6A2 2 0 0 1 16.8 20H7"/></svg>',
+  puxar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12l4 4 4-4"/></svg>',
+  editar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 5l5 5L9 20H4v-5z"/></svg>',
+  busca:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>',
+  mais:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 6v12M6 12h12"/></svg>',
+  user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
+  unid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V6l8-3 8 3v15M9 21v-5h6v5M8 9h1M15 9h1M8 13h1M15 13h1"/></svg>',
+  serv:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>',
+  info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 11v6M12 7v.1"/></svg>',
+  alerta:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 6v8M12 18v.1"/></svg>',
+  trava:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>'
+};
+const F = '<span class="ficticio">fictício</span>';
+const navegador = (url, conteudo, livre) =>
+  `<div class="tela${livre?' livre':''}"><div class="tela-et"><span class="pts"><i></i><i></i><i></i></span><span class="url">${url}</span></div><div class="tela-sc"><div class="tela-in">${conteudo}</div></div></div>`;
+const LEG = '<div class="legenda"><i></i> O contorno amarelo marca onde clicar.</div>';
+
+const barraAcoes = (alvo, exigencia) => `<div class="acoes">
+  <span class="ico g${alvo==='ok'?' alvo r':''}" data-tag="Concluir" title="Concluir">${S.ok}</span>
+  <span class="ico r${alvo==='cancel'?' alvo r':''}" data-tag="Cancelar" title="Cancelar">${S.cancel}</span>
+  ${exigencia
+    ? `<span class="ico${alvo==='cumprir'?' alvo r':''}" data-tag="Cumprir exigência" title="Cumprir exigência">${S.cumprir}</span>`
+    : `<span class="ico a${alvo==='exig'?' alvo r':''}" data-tag="Exigência" title="Colocar em exigência">${S.exig}</span>`}
+  <span class="ico${alvo==='transf'?' alvo r':''}" data-tag="Transferir" title="Transferir">${S.transf}</span>
+  <span class="ico${alvo==='baixar'?' alvo r':''}" data-tag="Baixar" title="Baixar processo">${S.baixar}</span>
+</div>`;
+
+const telaTarefa = (alvo, exigencia) => navegador('plataforma.dataprev.gov.br/#/centralgov/', `
+  <div class="ui-bar"><span>⌂ › Back Office (Tarefas)</span><span class="btn" style="padding:4px 14px">Voltar</span></div>
+  <div class="ui-h">Atualização de Endereço <code>661000000000 · Tarefa Principal</code>${F}</div>
+  <div class="abas"><span class="on">Detalhes</span><span>Despachos e anexos</span><span>Subtarefas</span><span>Lembretes</span><span>Histórico de ações</span></div>
+  ${barraAcoes(alvo, exigencia)}`);
+
+const janela = (titulo, conteudo) => navegador('plataforma.dataprev.gov.br/#/centralgov/', `
+  <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--rule)"><b style="font-family:var(--f-display);font-weight:600">${titulo}</b><span style="color:var(--muted)">✕</span></div>
+  ${conteudo}`);
+
+const anexos = `<div class="regras"><span>Cada arquivo: até 10 MB · soma de todos: até 100 MB</span><span>Formatos: .pdf .png .jpg .jpeg .gif .bmp .tif .tiff</span></div>`;
+const cabProc = `<div style="font-size:.86rem;color:var(--ink-2);padding-top:10px;display:flex;flex-direction:column;gap:2px">
+  <div><b>Protocolo:</b> <span style="font-family:var(--f-mono)">062000000000</span>${F}</div>
+  <div><b>Serviço:</b> Alteração de e-mail cadastrado no SIAPE</div>
+  <div><b>Interessado:</b> NOME DE EXEMPLO</div></div>`;
+
+const IMG = {"q1": "imagens/tela-q1.jpg", "q2": "imagens/tela-q2.jpg", "q3": "imagens/tela-q3.jpg", "q4": "imagens/tela-q4.jpg", "q5": "imagens/tela-q5.jpg", "q6": "", "s-000": "", "s-001": "imagens/tela-s-001.jpg", "s-002": "", "s-003": "imagens/tela-s-003.jpg", "s-004": "", "s-005": "", "s-006": "imagens/tela-s-006.jpg", "s-006b": "imagens/tela-s-006b.jpg", "s-acoes": "imagens/tela-s-acoes.jpg", "s-007": "", "s-008": "imagens/tela-s-008.jpg", "s-009": "imagens/tela-s-009.jpg", "s-010": "imagens/tela-s-010.jpg", "s-011": "imagens/tela-s-011.jpg", "s-012": "imagens/tela-s-012.jpg", "s-013": "imagens/tela-s-013.jpg", "s-014": "imagens/tela-s-014.jpg", "s-015": "imagens/tela-s-015.jpg", "s-016": "imagens/tela-s-016.jpg", "s-017": "imagens/tela-s-017.jpg", "s-018": "imagens/tela-s-018.jpg", "s-019": "imagens/tela-s-019.jpg", "s-020": "imagens/tela-s-020.jpg", "s-021": "imagens/tela-s-021.jpg"};
+
+const FOTOS = {
+ 3:[["s-001","Digite o CPF e clique em Continuar"],["s-003","Clique em Autorizar"]],
+ 4:[["q1","Clique no ícone do seu nome, no canto superior direito","","1.1"],["q2","Veja o perfil. Se precisar, clique em Trocar Perfil","","1.2"],["q3","Selecione a unidade","","2.1"],["q4","Em Perfil, escolha PROFISSIONAL","","2.2"],["q5","Clique em Confirmar","","2.3"]],
+ 5:[["s-006","Aba Minhas Tarefas: as suas tarefas","larga"],["s-006b","Aba Todas as Tarefas: as tarefas da unidade","larga"]],
+ 7:[["s-acoes","Marque a caixinha: a tarefa fica selecionada e os botões aparecem na barra azul","larga"]],
+ 6:[["s-010","Clique no + (Mais filtros)"],["s-011","Digite o número no campo Protocolo"]],
+ 8:[["s-009","Abas e botões de ação da tarefa"]],
+ 9:[["s-008","Aba Detalhes: dados básicos e dados adicionais"]],
+ 13:[["s-012","Botão ✓ Concluir"],["s-013","Escreva o despacho, anexe se precisar e clique em Salvar"]],
+ 10:[["s-016","Botão ▲ Exigência"],["s-017","Diga o que falta e clique em Salvar"]],
+ 11:[["s-018","Botão Cumprir Exigência (polegar)"]],
+ 14:[["s-014","Botão ⊘ Cancelar"],["s-015","Escreva o despacho do cancelamento e clique em Salvar"]],
+ 15:[["s-019","Botão ⇄ Transferir"],["s-020","Escolha a unidade de destino, escreva o motivo e clique em Salvar"]],
+ 16:[["s-021","Botão ⤓ Baixar processo"]]
+};
+const seqHTML = d => `<div class="seq" data-n="${d.lista.length}"><h3 class="clique-vis">Clique na imagem e visualize</h3>
+  <div class="seq-top"><span class="seq-cap"><b class="seq-num">1</b><span class="seq-txt">${d.lista[0][1]}</span></span><span class="seq-nav"><button class="seq-bt" data-d="-1" aria-label="Tela anterior">‹</button><span class="seq-cont">1 de ${d.lista.length}</span><button class="seq-bt" data-d="1" aria-label="Próxima tela">›</button></span></div>
+  <button class="zoom seq-zoom" data-k="${d.lista[0][0]}" aria-label="Ampliar"><img src="${IMG[d.lista[0][0]]}" alt="${d.lista[0][1]}"></button>
+  <div class="seq-th">${d.lista.map((f,n)=>`<button class="seq-t${n?'':' on'}" data-i="${n}" title="${f[1]}"><img src="${IMG[f[0]]}" alt=""><b>${n+1}</b></button>`).join("")}</div>
+</div>`;
+function initSeq(root, lista){
+  const z=root.querySelector(".seq-zoom"), im=z.querySelector("img"), num=root.querySelector(".seq-num"), tx=root.querySelector(".seq-txt"), ct=root.querySelector(".seq-cont");
+  let k=0;
+  const show=n=>{ k=(n+lista.length)%lista.length; const f=lista[k]; im.src=IMG[f[0]]; im.alt=f[1]; z.dataset.k=f[0]; num.textContent=k+1; tx.textContent=f[1]; ct.textContent=`${k+1} de ${lista.length}`; root.querySelectorAll(".seq-t").forEach((t,j)=>t.classList.toggle("on",j===k)); };
+  root.querySelectorAll(".seq-bt").forEach(b=>b.addEventListener("click",()=>show(k+ +b.dataset.d)));
+  root.querySelectorAll(".seq-t").forEach(b=>b.addEventListener("click",()=>show(+b.dataset.i)));
+}
+const fotosHTML = lista => `<div class="fotos n${lista.length}"><h3 class="clique-vis">Clique na imagem e visualize</h3>${lista.map((f,n)=>`<figure class="foto${f[2]?' '+f[2]:''}"><button class="zoom" data-k="${f[0]}" aria-label="Ampliar: ${f[1]}"><img src="${IMG[f[0]]}" alt="${f[1]}"></button><figcaption><span>${lista.length>1?`<b>${f[3]||n+1}</b>`:''}${f[1]}</span><span class="amp">Clique para ampliar</span></figcaption></figure>`).join("")}</div>`;
+
+const FASES = ["Prepare-se","Entre na CentralGov","Pegue a tarefa","Analise o pedido","Dê o desfecho"];
+const CORES = ["#4B2B8F","#0B7FA8","#1351B4","#C27A00","#168821"];
+
+const PASSOS = [
+{f:-1, t:"Início", mapa:true},
+
+{f:0, t:"Confira se você está habilitado", av:"Confirmou? Agora use o endereço de atendimento",
+ faca:[`<b>Tenha a conta gov.br ativa.</b> <span>É com ela que você entra.</span>`,`<b>Pergunte à sua chefia</b> <span>se você já está habilitado na unidade e no serviço.</span>`],
+ notas:[{k:"cuide",t:"Causa nº 1 de “entrei e não apareceu nada”",p:"Falta de habilitação na unidade ou no serviço. Resolva com a chefia antes de começar."}]},
+
+{f:0, t:"Use o endereço de atendimento", av:"Abriu o portal? Agora entre com o gov.br e autorize",
+ faca:[`<b>Clique no botão abaixo</b> <span>para abrir o portal de atendimento.</span><a class="link-portal" href="https://plataforma.dataprev.gov.br/#/centralgov/" target="_blank" rel="noopener">Abrir a CentralGov <span aria-hidden="true">↗</span></a>`,`<b>Salve nos favoritos</b> <span>para não cair no portal do solicitante.</span>`],
+ tela:`<div class="tela livre"><div class="tela-sc"><div class="tela-in" style="display:flex;flex-direction:column;gap:12px">
+  <div><div class="rotulo" style="margin-top:0">Quem atende (você)</div><a class="campo url-link" href="https://plataforma.dataprev.gov.br/#/centralgov/" target="_blank" rel="noopener"><span class="u">plataforma.dataprev.gov.br/#/centralgov/</span><span class="btn" style="padding:3px 12px;font-size:.74rem;font-family:var(--f-body)">Abrir ↗</span></a></div>
+  <div><div class="rotulo">Quem pede (o solicitante)</div><div class="campo" style="font-family:var(--f-mono);font-size:.82rem;text-decoration:line-through">centralgov.gestao.gov.br</div></div>
+ </div></div></div>`},
+
+{f:1, t:"Entre com o gov.br e autorize", av:"Autorizou? Agora confirme a unidade e o perfil",
+ faca:[`<b>Digite seu CPF</b> <span>e clique em Continuar.</span>`,`<b>Digite sua senha.</b>`,`<b>Se pedir código,</b> <span>abra o app gov.br no celular, toque em Gerar código de acesso e digite o número.</span>`,`<b>Clique em Autorizar.</b> <span>Sem isso, a entrada não continua.</span>`],
+ tela:navegador('sso.acesso.gov.br',`<div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px">
+  <div><b style="font-family:var(--f-display);font-weight:600">Identifique-se no gov.br</b>
+   <div class="rotulo">CPF</div><div class="campo">000.000.000-00</div>
+   <div style="height:12px"></div><span class="btn alvo r abaixo" data-tag="Continuar">Continuar</span></div>
+  <div style="border-left:1px solid var(--rule);padding-left:16px"><b style="font-family:var(--f-display);font-weight:600;font-size:.92rem">Verificação em duas etapas</b>
+   <div class="rotulo">Código de acesso</div><div class="campo">000000</div>
+   <div style="height:12px"></div><div class="linha"><span class="btn v">Cancelar</span><span class="btn">Ok</span></div></div>
+ </div>`)+LEG},
+
+{f:1, t:"Confirme a unidade e o perfil", av:"Confirmou? Agora abra o Painel de Tarefas",
+ faca:[`<b>Clique no ícone do seu nome,</b> <span>no canto superior direito (telas 1.1 e 1.2). Aparecem a unidade e o perfil: deve estar <b>PROFISSIONAL</b>.</span>`,`<b>Está como gestor?</b> <span>Clique em <b>Trocar Perfil</b> e siga as telas 2.1 a 2.3: unidade → <b>PROFISSIONAL</b> → Confirmar.</span>`],
+ tela:navegador('plataforma.dataprev.gov.br/#/centralgov/',`<b style="font-family:var(--f-display);font-weight:600">Selecionar o Perfil</b>
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:4px">
+   <div><div class="rotulo">Selecione a Unidade</div><div class="campo">CGADM-DEGOV-SPU ▾</div></div>
+   <div><div class="rotulo">Selecione o Perfil</div><div class="campo alvo" data-tag="Escolha este" style="color:var(--ink)"><b>PROFISSIONAL</b> ▾</div></div>
+  </div>
+  <div style="height:16px"></div><div class="linha" style="justify-content:flex-end"><span class="btn v">Sair</span><span class="btn">Confirmar</span></div>`)+LEG},
+
+{f:2, t:"Abra o Painel de Tarefas", av:"Abriu? Agora ache um pedido pelo protocolo",
+ lead:`É a sua mesa de trabalho. Fica no menu do canto superior esquerdo.`,
+ faca:[`<b>Clique em Back Office → Painel de Tarefas.</b>`,`<b>Minhas Tarefas:</b> <span>as que você já está fazendo e as que o gestor da unidade atribuiu a você.</span>`,`<b>Todas as Tarefas:</b> <span>todas as tarefas da unidade. Se uma estiver pendente e sem atribuição, você pode puxá-la para tratar aquele protocolo.</span>`,`<b>Olhe primeiro Atrasadas e Vencendo hoje.</b> <span>São as que pedem atenção imediata.</span>`],
+ tela:navegador('plataforma.dataprev.gov.br/#/centralgov/',`<div style="display:flex;gap:22px;align-items:flex-start">
+  <div><div class="una">UNA</div><div style="font-size:.8rem;color:var(--muted);margin-bottom:10px">CentralGov</div>
+  <div class="menu"><div class="on">Back Office <span>▴</span></div><div class="sub alvo" data-tag="Clique aqui" style="outline-offset:-3px">Painel de Tarefas</div><div>Base de Conhecimento <span>▾</span></div><div>Atendimento Presencial <span>▾</span></div></div></div>
+  <div style="padding-top:44px;font-size:.88rem;color:var(--ink-2)">Olá, SERVIDOR.<br><span style="color:var(--muted)">Bem-vindo(a) à Plataforma UNA.</span></div>
+ </div>`)+LEG},
+
+{f:2, t:"Ache um pedido pelo protocolo", av:"Achou? Agora selecione a tarefa",
+ lead:`Quando você precisa voltar a um pedido específico, busque pelo número do protocolo.`,
+ faca:[`<b>No Painel de Tarefas, clique em +</b> <span>(Mais filtros).</span>`,`<b>Digite o número no campo Protocolo.</b>`,`<b>Clique na lupa</b> <span>para pesquisar.</span>`],
+ tela:navegador('plataforma.dataprev.gov.br/#/centralgov/',`
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+   <div><div class="rotulo" style="margin-top:0">Unidade(s)</div><div class="campo">Selecione ▾</div></div>
+   <div><div class="rotulo" style="margin-top:0">Grupo(s) de serviços</div><div class="campo">Selecione ▾</div></div>
+   <div><div class="rotulo" style="margin-top:0">Status</div><div class="campo">Selecione ▾</div></div>
+  </div>
+  <div class="linha" style="justify-content:flex-end;margin-top:30px"><span class="ico alvo r" data-tag="Mais filtros">${S.mais}</span><span class="ico">${S.busca}</span></div>
+  <div style="border-top:1px dashed var(--rule-2);margin-top:14px;padding-top:4px">
+   <div class="rotulo">Protocolo</div><div class="campo alvo abaixo" data-tag="Digite o número" style="color:var(--ink);font-family:var(--f-mono)">183001035482</div>
+  </div><div style="height:26px"></div>`)+LEG},
+
+{f:2, t:"Selecione a tarefa", av:"Selecionou? Agora conheça a tela da tarefa",
+ lead:`O sistema procura na fila da unidade uma tarefa <b>compatível com as suas competências</b> e entrega a você automaticamente.`,
+ faca:[`<b>Na lista, marque a caixinha da tarefa.</b> <span>A barra azul mostra “1 item selecionado”.</span>`,`<b>Os botões de ação aparecem</b> <span>na barra azul. Você vai usá-los para ver os detalhes (fase 4) e dar o desfecho (fase 5).</span>`],
+ tela:navegador('plataforma.dataprev.gov.br/#/centralgov/',`
+  <div class="ui-bar"><span>⌂ › Back Office (Tarefas)</span><span class="ics"><span class="ico cheio alvo r abaixo" data-tag="Puxar tarefa">${S.puxar}</span><span class="ico">${S.editar}</span><span class="ico">${S.busca}</span></span></div>
+  <div style="height:44px"></div>
+  <div class="campo" style="display:block;background:var(--surface);border-color:var(--gov)">
+   <div style="font-family:var(--f-mono);font-size:.78rem;color:var(--muted)">062000000000 ${F}</div>
+   <div style="margin-top:2px;color:var(--ink)"><b>Criar tipos de documentos no SEI/ColaboraGov</b></div>
+   <div style="font-size:.82rem;color:var(--ok);font-weight:600">✓ Atribuída a você</div>
+  </div>`)+LEG},
+
+{f:3, t:"Conheça a tela da tarefa", av:"Conheceu? Agora leia os detalhes antes de agir",
+ lead:`Cinco abas e, logo abaixo, <b>cinco botões de ação</b>. Todo desfecho sai desses botões.`,
+ faca:[`<b>Detalhes:</b> <span>dados do pedido e do solicitante.</span>`,`<b>Despachos e anexos:</b> <span>a conversa e os arquivos.</span>`,`<b>Histórico de ações:</b> <span>quem fez o quê, e quando.</span>`],
+ tela:telaTarefa('')+`<div class="tela livre" style="box-shadow:none"><div class="tela-in" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;font-size:.88rem">
+   <div style="display:flex;gap:8px;align-items:center"><span class="ico g">${S.ok}</span>Concluir</div>
+   <div style="display:flex;gap:8px;align-items:center"><span class="ico r">${S.cancel}</span>Cancelar</div>
+   <div style="display:flex;gap:8px;align-items:center"><span class="ico a">${S.exig}</span>Colocar em exigência</div>
+   <div style="display:flex;gap:8px;align-items:center"><span class="ico">${S.transf}</span>Transferir de unidade</div>
+   <div style="display:flex;gap:8px;align-items:center"><span class="ico">${S.baixar}</span>Baixar processo</div>
+ </div></div>`},
+
+{f:3, t:"Leia os detalhes antes de agir", av:"Falta algo? Veja como colocar em exigência",
+ lead:`Confira os campos destacados. Se faltar documento ou informação, você já sabe: o caminho é exigência.`,
+ faca:[`<b>Serviço e unidade:</b> <span>o pedido é mesmo da sua competência?</span>`,`<b>Prazo e status:</b> <span>quanto tempo resta?</span>`,`<b>Solicitante:</b> <span>quem pediu pode pedir esse serviço?</span>`,`<b>Despachos e anexos:</b> <span>está tudo o que o serviço exige?</span>`],
+ tela:navegador('plataforma.dataprev.gov.br/#/centralgov/',`<b style="font-family:var(--f-display);font-weight:600;font-size:.95rem">Dados básicos</b> ${F}
+  <div style="height:10px"></div>
+  <dl class="grade">
+   <div class="chave"><dt>Sigla - Unidade</dt><dd>CGADM - Coord.-Geral de Administração</dd></div>
+   <div><dt>Protocolado em</dt><dd>05/10/2026 09:12</dd></div>
+   <div class="chave"><dt>Status</dt><dd>Pendente</dd></div>
+   <div><dt>Canal do protocolo</dt><dd>Site/Aplicativo</dd></div>
+   <div><dt>Última atualização</dt><dd>05/10/2026 09:30</dd></div>
+   <div class="chave"><dt>Prazo</dt><dd>09/11/2026</dd></div>
+   <div class="chave"><dt>Solicitante</dt><dd>NOME DE EXEMPLO</dd></div>
+   <div><dt>Responsável</dt><dd>Você</dd></div>
+   <div><dt>Prioridade</dt><dd>Normal</dd></div>
+  </dl>`)},
+
+{f:3, t:"Coloque em exigência", av:"O solicitante entregou na unidade? Veja como registrar", cor:"warn",
+ lead:`Use quando <b>falta documento ou informação</b>. A tarefa volta ao interessado e o processo fica suspenso até ele responder.`,
+ faca:[`<b>Clique no botão ▲ Exigência.</b>`,`<b>Diga exatamente o que falta.</b> <span>Ex.: “Anexe a certidão de matrícula do imóvel atualizada.”</span>`,`<b>Clique em Salvar.</b>`],
+ tela:telaTarefa('exig')+`<div style="height:4px"></div>`+janela('Colocar tarefa em exigência',`${cabProc}<div class="rotulo">Exigência</div><div class="campo alto">Diga exatamente o que falta…</div>${anexos}<div style="height:14px"></div><div class="linha" style="justify-content:flex-end"><span class="btn alvo r" data-tag="Por fim">Salvar</span></div>`),
+ notas:[{k:"trava",t:"Exigência trava a transferência",p:"Com exigência aberta, a tarefa não pode ir para outra unidade. Se for transferir, transfira antes de colocar em exigência."}]},
+
+{f:3, t:"Registre a exigência cumprida", av:"Análise pronta? Agora escolha o desfecho", cor:"warn",
+ lead:`O solicitante cumpre a exigência <b>online</b>, pelo portal dele. Se ele for <b>pessoalmente</b> à unidade, é você quem registra.`,
+ faca:[`<b>Abra os detalhes do processo.</b>`,`<b>Clique em Cumprir Exigência</b> <span>(o ícone de polegar, que aparece no lugar do ▲).</span>`,`<b>Registre o que foi entregue</b> <span>e salve. A tarefa volta para análise.</span>`],
+ tela:telaTarefa('cumprir', true)+LEG},
+
+{f:4, t:"Escolha o desfecho", av:"Escolheu? Veja como concluir a tarefa", decisao:true,
+ lead:`Responda à pergunta que corresponde ao seu caso. Cada uma leva a um botão diferente.`},
+
+{f:4, t:"Conclua a tarefa", av:"Não é este o caso? Veja como cancelar a tarefa", cor:"ok",
+ lead:`Use quando <b>a análise terminou</b> e não há nada pendente. Vale tanto para deferir quanto para indeferir com justificativa.`,
+ faca:[`<b>Clique no botão ✓ Concluir.</b>`,`<b>Escreva o despacho</b> <span>dizendo o que foi decidido (mínimo 10 caracteres).</span>`,`<b>Anexe documentos,</b> <span>se houver.</span>`,`<b>Clique em Salvar.</b>`],
+ tela:telaTarefa('ok')+`<div style="height:4px"></div>`+janela('Concluir tarefa',`<div class="rotulo">Despacho</div><div class="campo alto erro">Escreva o que foi decidido…</div><div class="obg">Campo obrigatório (mínimo 10 caracteres)</div>${anexos}<div style="height:14px"></div><div class="linha" style="justify-content:flex-end"><span class="btn alvo r" data-tag="Por fim">Salvar</span></div>`),
+ notas:[{k:"",t:"Escreva para quem vai ler",p:"O despacho é o que o solicitante e o próximo colega vão ler. Diga a decisão e o motivo em linguagem simples."}]},
+
+{f:4, t:"Cancele a tarefa", av:"Não é este o caso? Veja como transferir", cor:"stop",
+ lead:`Use <b>só</b> quando quem pediu <b>não tem legitimidade</b> para pedir aquele serviço. O processo encerra sem análise do mérito.`,
+ faca:[`<b>Clique no botão ⊘ Cancelar.</b>`,`<b>Escreva o despacho do cancelamento,</b> <span>explicando a falta de legitimidade.</span>`,`<b>Clique em Salvar.</b>`],
+ tela:telaTarefa('cancel')+`<div style="height:4px"></div>`+janela('Cancelar tarefa',`${cabProc}<div class="rotulo">Despacho do cancelamento</div><div class="campo alto erro">Explique por que o solicitante não pode pedir…</div><div class="obg">Campo obrigatório (mínimo 10 caracteres)</div><div style="height:14px"></div><div class="linha" style="justify-content:flex-end"><span class="btn">Salvar</span></div>`),
+ notas:[{k:"cuide",t:"Cancelar não é indeferir",p:"Se o pedido é legítimo mas não procede, conclua a tarefa com despacho explicando o indeferimento. Cancelar tira do solicitante a resposta a que ele tem direito."}]},
+
+{f:4, t:"Transfira para outra unidade", av:"Precisa de cópia? Veja como baixar o processo", cor:"blue",
+ lead:`Use quando a análise precisa de <b>outra unidade</b> do mesmo Elo, ou quando a passagem entre unidades faz parte do fluxo normal do serviço.`,
+ faca:[`<b>Confira que não há exigência aberta.</b>`,`<b>Clique no botão ⇄ Transferir.</b>`,`<b>Escolha a unidade de destino.</b>`,`<b>Escreva o motivo</b> <span>e clique em Salvar.</span>`],
+ tela:telaTarefa('transf')+`<div style="height:4px"></div>`+janela('Transferir tarefa de unidade',`${cabProc}<div class="rotulo">Unidade de destino</div><div class="campo alto alvo" data-tag="Escolha o destino" style="min-height:0;align-items:center;margin-top:30px">Selecione uma unidade ▾</div><div class="rotulo">Despacho da transferência</div><div class="campo alto erro">Por que está transferindo…</div><div class="obg">Campo obrigatório (mínimo 10 caracteres)</div><div style="height:14px"></div><div class="linha" style="justify-content:flex-end"><span class="btn">Salvar</span></div>`),
+ notas:[{k:"trava",t:"Com exigência aberta, não transfere",p:"Resolva a exigência primeiro, ou transfira antes de abri-la."}]},
+
+{f:4, t:"Baixe o processo", av:"Terminou? Agora veja o resumo para consulta", cor:"blue",
+ lead:`Baixa o processo <b>inteiro</b>, com todos os anexos e despachos, em cópia organizada e oficial. Não encerra nada.`,
+ faca:[`<b>Clique no botão ⤓ Baixar.</b>`,`<b>Use quando o solicitante pedir</b> <span>cópia completa do processo.</span>`],
+ tela:telaTarefa('baixar')+LEG,
+ notas:[{k:"",t:"E depois da CentralGov?",p:"Havendo mérito, a área finalística pode abrir processo no SEI para dar seguimento. Isso acontece fora desta plataforma."}]},
+
+{f:-2, t:"Resumo para consulta", cola:true}
+];
+
+const DESFECHOS = [
+ {c:"ok",ic:S.ok,q:"A análise terminou e não falta nada?",b:"Concluir",d:"Encerra com despacho. Serve para deferir ou indeferir com motivo.",ir:13},
+ {c:"stop",ic:S.cancel,q:"Quem pediu não pode pedir este serviço?",b:"Cancelar",d:"Encerra sem analisar o mérito, por falta de legitimidade.",ir:14},
+ {c:"blue",ic:S.transf,q:"Precisa de outra unidade?",b:"Transferir",d:"Encaminha para a unidade competente, com despacho.",ir:15},
+ {c:"warn",ic:S.baixar,q:"Precisa de cópia completa?",b:"Baixar processo",d:"Baixa o processo inteiro, com anexos e despachos.",ir:16}
+];
+
+let i = 0, maxVisto = 0; const vistos = new Set();
+const $ = id => document.getElementById(id);
+const elPasso=$("passo"), elIndice=$("indice"), elTrilho=$("trilho");
+
+function notasHTML(ns){
+  if(!ns) return "";
+  return `<div class="avisos">${ns.map(n=>`<div class="nota ${n.k}"><span class="i">${n.k==='trava'?S.trava:n.k==='cuide'?S.alerta:S.info}</span><div><strong>${n.t}</strong><p>${n.p}</p></div></div>`).join("")}</div>`;
+}
+
+function numP(k){ const q=PASSOS[k]; if(!q||q.f<0) return ""; return (q.f+1)+"."+(PASSOS.filter((x,j)=>x.f===q.f&&j<=k).length); }
+function primeiroDaFase(f){ return PASSOS.findIndex(p=>p.f===f); }
+
+
+function abertura(){
+  return `<div class="cab abre"><div class="eyebrow">Boas-vindas</div><h2>Guia do Profissional CentralGov</h2>
+  <p>Antes de começar, entenda o que é a plataforma e como este guia vai ajudar você.</p></div>
+  <div class="intro">
+   <section><span class="intro-ic">${S.unid}</span><div>
+    <h3>O que é o CentralGov?</h3>
+    <p>O CentralGov é a plataforma de serviços do Governo Federal que atenderá os serviços da SPU, em substituição ao <b>ColaboraGov (CITSmart)</b>.</p>
+    <p>Este é um guia eletrônico desenvolvido para orientar os profissionais na atuação e execução dos serviços disponibilizados na plataforma.</p>
+   </div></section>
+   <section><span class="intro-ic">${S.serv}</span><div>
+    <h3>Como utilizar este guia?</h3>
+    <p>Navegue pela trilha para acompanhar, passo a passo, as etapas do serviço. As orientações apresentam os procedimentos que devem ser realizados, incluindo as <b>telas do CentralGov</b> para facilitar a identificação e execução de cada etapa.</p>
+   </div></section>
+  </div>
+  <p class="kbd-linha"><span>Use as setas</span> <kbd>←</kbd> <kbd>→</kbd> <span>do teclado para voltar e avançar</span></p>
+  <p class="intro-seq">Após esta apresentação, você encontrará a <b>Visão Geral</b> do serviço e, em seguida, o <b>passo a passo</b> para sua execução.</p>
+  <div class="cta-linha" style="margin-top:0"><button class="cta" data-ir="1">Iniciar guia <span aria-hidden="true">→</span></button></div>`;
+}
+
+function visaoGeral(){
+  const IC=[
+   '<svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg>',
+   '<svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5M15 12H3"/></svg>',
+   '<svg viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5h13L22 12v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6z"/></svg>',
+   '<svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>',
+   '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16.5 9.5"/></svg>'];
+  const RES = ["Conta gov.br e habilitação","Login, autorização e perfil","Painel, protocolo e seleção","Detalhes, exigência e cumprida","Concluir, cancelar, transferir ou baixar"];
+  const etapas = FASES.map((nome,f)=>{
+    const n = PASSOS.filter(p=>p.f===f).length;
+    return `<button class="cp-et" style="--ec:${CORES[f]}" data-ir="${primeiroDaFase(f)}"><span class="cp-ic">${IC[f]}<i>${f+1}</i></span><b>${nome}</b><small>${RES[f]}</small></button>`;
+  }).join('<span class="cp-seta" aria-hidden="true"></span>');
+  return `<div class="capa">
+    <h2>Como atender uma tarefa</h2>
+    <p class="cp-sub">Do login ao desfecho, em 5 etapas.</p>
+    <div class="cp-trilha">${etapas}</div>
+    <div class="cp-acoes"><button class="cp-go" data-ir="${primeiroDaFase(0)}">Começar <span aria-hidden="true">→</span></button></div>
+  </div>`;
+}
+
+function decisao(){
+  return `<div class="ramos">${DESFECHOS.map(d=>`<button class="ramo ${d.c}" data-ir="${d.ir}"><span class="ico">${d.ic}</span><span class="q">${d.q}</span><b>${d.b}</b><span class="d">${d.d}</span></button>`).join("")}</div>
+  ${notasHTML([{k:"trava",t:"Ordem importa",p:"Se vai transferir, transfira antes de colocar em exigência. Com exigência aberta, a transferência fica bloqueada."}])}`;
+}
+
+function cola(){
+  return `<div class="cab"><div class="eyebrow">Para deixar aberto ao lado</div><h2>Resumo para consulta</h2><p>Tudo o que você precisa lembrar, em uma tela.</p></div>
+  <div class="cola">
+   <section><h3>Para entrar</h3><ul>
+    <li>Endereço: <a class="url-inline" href="https://plataforma.dataprev.gov.br/#/centralgov/" target="_blank" rel="noopener">plataforma.dataprev.gov.br/#/centralgov/</a></li>
+    <li>CPF e senha do <b>gov.br</b>, código do celular se pedir</li>
+    <li>Clique em <b>Autorizar</b></li>
+    <li>Confira a <b>unidade</b> e o perfil <b>PROFISSIONAL</b></li></ul></section>
+   <section><h3>Para pegar trabalho</h3><ul>
+    <li><b>Back Office → Painel de Tarefas</b></li>
+    <li>Trabalhe na aba <b>Minhas Tarefas</b></li>
+    <li>Clique em <b>Puxar Tarefa</b> para receber a próxima</li>
+    <li>Para achar um pedido: <b>+ Mais filtros → Protocolo</b></li></ul></section>
+   <section style="grid-column:1/-1"><h3>Qual botão usar</h3>
+    <div style="overflow-x:auto"><table class="tab"><tbody>
+     <tr><td class="ok">✓ Concluir</td><td>A análise terminou. Vale para deferir ou indeferir com motivo.</td></tr>
+     <tr><td class="warn">▲ Exigência</td><td>Falta documento ou informação. Suspende até o solicitante responder.</td></tr>
+     <tr><td class="warn">👍 Cumprir exigência</td><td>O solicitante entregou na unidade, pessoalmente. Você registra.</td></tr>
+     <tr><td class="stop">⊘ Cancelar</td><td>Só quando quem pediu não tem legitimidade. Não analisa mérito.</td></tr>
+     <tr><td class="blue">⇄ Transferir</td><td>Precisa de outra unidade. Não funciona com exigência aberta.</td></tr>
+     <tr><td class="blue">⤓ Baixar</td><td>Cópia integral do processo. Não encerra nada.</td></tr>
+    </tbody></table></div></section>
+   <section style="grid-column:1/-1"><h3>Não esqueça</h3><ul>
+    <li>Todo despacho é <b>obrigatório</b>, com no mínimo <b>10 caracteres</b>.</li>
+    <li>Anexos: até <b>10 MB</b> cada, <b>100 MB</b> no total, em PDF ou imagem.</li>
+    <li>Puxou e não veio nada? Fila vazia ou falta de competência. Fale com o gestor da unidade.</li></ul></section>
+  </div>`;
+}
+
+function render(){
+  const p = PASSOS[i];
+  let html;
+  if (p.abertura) html = abertura();
+  else if (p.mapa) html = visaoGeral();
+  else if (p.cola) html = cola();
+  else {
+    const fase = FASES[p.f];
+    const dentro = PASSOS.filter(x=>x.f===p.f);
+    const pos = dentro.indexOf(p)+1;
+    html = `<div class="cab cab-passo"><div class="eyebrow"><span class="n">Fase ${p.f+1}</span>${fase} · passo ${numP(i)} (${pos} de ${dentro.length})</div><h2>${p.t}</h2>${p.lead?`<p>${p.lead}</p>`:""}</div>`;
+    if (p.decisao) html += decisao();
+    else {
+      const temVis = !!(FOTOS[i] || p.tela);
+      html += `<div class="corpo${p.faca && temVis?'':' so'}">`;
+      if (p.faca) html += `<div class="col-esq${temVis?'':' lado'}"><div class="faca"><h3>O que fazer</h3><ol>${p.faca.map(x=>`<li><div>${x}</div></li>`).join("")}</ol></div>${notasHTML(p.notas)}</div>`;
+      html += (temVis ? `<div style="display:flex;flex-direction:column;gap:20px;min-width:0">${FOTOS[i]?(FOTOS[i].seq?seqHTML(FOTOS[i]):fotosHTML(FOTOS[i])):p.tela}</div>` : "") + `</div>`;
+      if (!p.faca) html += notasHTML(p.notas);
+    }
+  }
+  if (i>0){
+    const ant = PASSOS[i-1], prox = PASSOS[i+1];
+    html += `<div class="seguir">
+      <button class="seg ant" data-ir="${i-1}"><small>← Voltar · passo anterior</small><span>${ant.t}</span></button>
+      ${prox?`<button class="seg prox" data-ir="${i+1}"><small>Avançar · próximo passo →</small><span>${p.av||prox.t}</span></button>`:`<button class="seg prox" data-ir="0"><small>Fim da trilha</small><span>Voltar ao início</span></button>`}
+    </div>`;
+  }
+  elPasso.innerHTML = html;
+  const eb = elPasso.querySelector(".eyebrow");
+  if (eb && !p.abertura) eb.insertAdjacentHTML("beforeend", `<span class="teclas">Use as setas <kbd>←</kbd> <kbd>→</kbd> do teclado para voltar e avançar</span>`);
+  elPasso.style.setProperty("--c", p.f>=0 ? CORES[p.f] : "#1351B4");
+  if (FOTOS[i] && FOTOS[i].seq) elPasso.querySelectorAll(".seq").forEach(r=>initSeq(r,FOTOS[i].lista));
+  elPasso.querySelectorAll(".zoom").forEach(b=>b.addEventListener("click",()=>abrir(b.dataset.k,b.querySelector("img").alt)));
+  elPasso.querySelectorAll("[data-ir]").forEach(b=>b.addEventListener("click",()=>ir(+b.dataset.ir)));
+
+  maxVisto = Math.max(maxVisto, i);
+  elIndice.querySelectorAll("button").forEach(b=>{ b.classList.toggle("futuro", +b.dataset.n>maxVisto); b.setAttribute("aria-current", +b.dataset.n===i?"true":"false"); b.classList.toggle("feito", +b.dataset.n<i && PASSOS[+b.dataset.n].f>=0 && PASSOS[i].f!==-1); });
+
+  const faseAtual = p.f<=-3 || p.f===-1 ? -1 : p.f===-2 ? 5 : p.f;
+  elTrilho.querySelectorAll(".fase").forEach((b,f)=>{
+    b.classList.toggle("feita", f<faseAtual);
+    b.classList.toggle("atual", f===faseAtual);
+    let pct = 0;
+    if (f<faseAtual) pct = 100;
+    else if (f===faseAtual){ const d = PASSOS.filter(x=>x.f===f); pct = Math.round((d.indexOf(p)+1)/d.length*100); }
+    b.style.setProperty("--p", pct+"%");
+  });
+
+
+  $("inicio").setAttribute("aria-current", i===0?"true":"false");
+  if (typeof IDX_DESF!=="undefined"){
+    const pp=PASSOS[i];
+    $("nav-resumo").setAttribute("aria-current", i===PASSOS.length-1?"true":"false");
+    const n = pp.f>=0 ? PASSOS.slice(0,i+1).filter(x=>x.f>=0).length : 0;
+    $("prog-t").textContent = n ? `Passo ${n} de ${TOT}` : `${TOT} passos`;
+    $("prog-b").style.width = (n/TOT*100)+"%";
+    const C = 2*Math.PI*18, cor = pp.f>=0 ? CORES[pp.f] : "#1351B4";
+    $("ring-v").style.strokeDasharray = C; $("ring-v").style.strokeDashoffset = C*(1-n/TOT); $("ring-v").style.stroke = cor;
+    $("ring-t").textContent = pp.cola ? "✓" : n;
+    $("ring-f").textContent = pp.f>=0 ? `Fase ${pp.f+1} · ${FASES[pp.f]}` : (pp.cola ? "Consulta rápida" : "Início");
+    $("ring-f").style.color = pp.f>=0 ? cor : "";
+    $("ring-s").textContent = n ? `Passo ${n} de ${TOT}` : `${TOT} passos em 5 fases`;
+    $("mig").textContent = pp.mapa ? "Início" : pp.t; document.body.classList.toggle("na-capa", !!pp.mapa); document.body.classList.toggle("em-passo", pp.f>=0);
+    document.querySelectorAll("#flinha i").forEach((el,f)=>{ el.style.background = (pp.f>=0 && f<=pp.f) || pp.cola ? CORES[f] : ""; el.classList.toggle("cur", f===pp.f); });
+  }
+  try{ localStorage.setItem("guia-centralgov-passo", String(i)); }catch(e){}
+}
+
+function ir(n){
+  i = Math.max(0, Math.min(PASSOS.length-1, n));
+  render();
+  if (!document.activeElement || document.activeElement===document.body || !document.contains(document.activeElement)) elPasso.focus({preventScroll:true});
+  window.scrollTo({top:0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+}
+
+function montar(){
+  elTrilho.innerHTML = FASES.map((f,n)=>`<button class="fase" data-ir="${primeiroDaFase(n)}"><i></i><span><em>${n+1}</em>${f}</span></button>`).join("");
+  elTrilho.querySelectorAll(".fase").forEach(b=>b.addEventListener("click",()=>ir(+b.dataset.ir)));
+
+  let h = ``;
+  FASES.forEach((nome,f)=>{
+    h += `<div class="grupo" style="--c:${CORES[f]};--n:${PASSOS.filter(p=>p.f===f).length+1}"><strong><i></i><span class="gnum">${f+1} ·</span>${nome}</strong>`;
+    PASSOS.forEach((p,n)=>{ if(p.f===f) h += `<button data-n="${n}"><em>${numP(n)}</em><span>${p.t}</span></button>`; });
+    h += `</div>`;
+  });
+  elIndice.innerHTML = h;
+  elIndice.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>ir(+b.dataset.n)));
+}
+
+
+const lupa=$("lupa"), lupaImg=$("lupa-img");
+const TELAS = []; Object.keys(FOTOS).map(Number).sort((a,b)=>a-b).forEach(n=>{ const L = FOTOS[n].seq ? FOTOS[n].lista : FOTOS[n]; L.forEach(f=>TELAS.push({k:f[0], leg:f[1], n})); });
+let tAtual = 0;
+function mostrarTela(x){
+  if (TELAS[tAtual] && TELAS[x] && TELAS[x].n!==TELAS[tAtual].n && !lupa.hidden) return; if (x<0||x>=TELAS.length) return; tAtual = x;
+  const t = TELAS[tAtual], p = PASSOS[t.n];
+  lupaImg.src = IMG[t.k]; lupaImg.alt = t.leg;
+  $("lupa-pas").textContent = `Passo ${numP(t.n)} · ${p.t}`;
+  $("lupa-pas").style.background = CORES[p.f] || "#4B5B70";
+  $("lupa-leg").textContent = t.leg;
+  const grp=TELAS.filter(x=>x.n===t.n), pos=grp.indexOf(t);
+  $("lupa-cont").textContent = grp.length>1 ? `Tela ${pos+1} de ${grp.length}` : "";
+  $("lupa-ant").style.visibility = pos>0 ? "visible" : "hidden";
+  $("lupa-prox").style.visibility = pos<grp.length-1 ? "visible" : "hidden";
+  $("lupa-ant").style.display = $("lupa-prox").style.display = grp.length>1 ? "" : "none";
+}
+function abrir(k,alt){ let x = TELAS.findIndex(t=>t.k===k && t.n===i); if (x<0) x = TELAS.findIndex(t=>t.k===k); mostrarTela(Math.max(0,x)); lupa.hidden=false; $("lupa-x").focus(); }
+function fechar(){ lupa.hidden=true; }
+lupa.addEventListener("click",e=>{ if (e.target===lupa || e.target.id==="lupa-x" || e.target.classList.contains("lupa-meio")) fechar(); });
+$("lupa-ant").addEventListener("click",e=>{ e.stopPropagation(); mostrarTela(tAtual-1); });
+$("lupa-prox").addEventListener("click",e=>{ e.stopPropagation(); mostrarTela(tAtual+1); });
+document.addEventListener("keydown",e=>{ if (lupa.hidden) return; if (e.key==="ArrowRight"||e.key==="ArrowLeft"){ e.preventDefault(); e.stopImmediatePropagation(); } }, true);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape" && !lupa.hidden) fechar(); },true);
+
+$("inicio").addEventListener("click",()=>ir(0));
+const IDX_DESF = PASSOS.findIndex(p=>p.decisao), TOT = PASSOS.filter(p=>p.f>=0).length;
+$("nav-resumo").addEventListener("click",()=>ir(PASSOS.length-1));
+document.querySelector(".selo").addEventListener("click",()=>ir(0));
+document.addEventListener("keydown",e=>{ if(e.key==="Home" && lupa.hidden && !e.target.matches("input,textarea,select")) ir(0); });
+document.addEventListener("keydown",e=>{
+  if (e.target.matches("input,textarea,select") || !lupa.hidden) return;
+  if (e.key==="ArrowRight"){ e.preventDefault(); ir(i+1); }
+  if (e.key==="ArrowLeft"){ e.preventDefault(); ir(i-1); }
+});
+/* garante que a página receba as setas sem precisar clicar antes */
+function pegarFoco(){ try{ window.focus(); }catch(e){} if (!document.activeElement || document.activeElement===document.body) elPasso.focus({preventScroll:true}); }
+window.addEventListener("load", pegarFoco);
+document.addEventListener("mouseenter", pegarFoco);
+document.addEventListener("mousemove", function m(){ pegarFoco(); document.removeEventListener("mousemove", m); });
+
+montar();
+const m = /^#passo(\d+)$/.exec(location.hash);
+if (m) i = Math.min(PASSOS.length-1, +m[1]);
+else i = 0;
+render();
+</script>
+
+<script>(function(){function m(){var t=document.querySelector('header.topo');if(t)document.documentElement.style.setProperty('--topo',t.offsetHeight+'px')}m();addEventListener('resize',m);addEventListener('load',m);new MutationObserver(m).observe(document.body,{attributes:true,attributeFilter:['class']});
+function caber(){var P=document.getElementById('passo');if(!P)return;P.style.setProperty('--esc',1);if(innerWidth<901||!document.body.classList.contains('em-passo'))return;var e=1;while(P.scrollHeight-P.clientHeight>2&&e>.70){e=Math.round((e-.03)*100)/100;P.style.setProperty('--esc',e)}}
+function tempoPisca(){var P=document.getElementById('passo');if(!P)return;var b=P.querySelector('.seg.prox');if(!b)return;
+ var txt='';P.querySelectorAll(':scope>*:not(.seguir):not(.cab)').forEach(function(e){txt+=' '+e.innerText});
+ var palavras=(txt.trim().match(/\S+/g)||[]).length, imgs=P.querySelectorAll('.zoom img, .ramo').length;
+ /* leitura rápida ~8 palavras por segundo + 0,5 s por imagem ou cartão; entre 5 e 10 s */
+ var seg=Math.min(10,Math.max(5,Math.round(palavras/8+imgs*0.5)));
+ b.dataset.pisca=seg; clearTimeout(window._tSurge); clearTimeout(window._tPisca);
+ /* passo já visto (ou anterior ao mais avançado): botão já fica, sem esperar nem piscar */
+ if(vistos.has(i) || i<maxVisto){ b.classList.add('vis','ja'); return; }
+ var este=i;
+ /* aparece depois de 3 s; pisca a partir do tempo calculado */
+ window._tSurge=setTimeout(function(){b.classList.add('vis'); vistos.add(este)},3000);
+ window._tPisca=setTimeout(function(){b.classList.add('pisca')},seg*1000);}
+var P=document.getElementById('passo');if(P){new MutationObserver(function(){requestAnimationFrame(function(){caber();tempoPisca()})}).observe(P,{childList:true})}
+addEventListener('resize',caber);addEventListener('load',caber);document.addEventListener('load',function(ev){if(ev.target.tagName==='IMG')caber()},true)})();</script>
+
+</body>
+</html>
